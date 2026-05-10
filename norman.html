@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Norman — Ambassador</title>
+    <style>
+        :root {
+            --navy-deep: #0a1628;
+            --navy: #14213d;
+            --navy-mid: #1b2d4a;
+            --navy-light: #243a5c;
+            --navy-accent: #2f4a70;
+            --white-paper: #faf8f4;
+            --white-warm: #f5f2ec;
+            --white-cool: #fefefc;
+            --grey-millennial-light: #c8c6c2;
+            --grey-millennial: #a8a6a1;
+            --grey-millennial-mid: #94928d;
+            --grey-millennial-dark: #7a7874;
+            --grey-warm: #b5b2ad;
+            --grey-cool: #b0b0b0;
+            --shadow-soft: 0 1px 3px rgba(10, 22, 40, 0.06), 0 1px 2px rgba(10, 22, 40, 0.04);
+            --shadow-paper: 0 1px 2px rgba(10, 22, 40, 0.04), 0 2px 4px rgba(10, 22, 40, 0.03),
+                0 4px 8px rgba(10, 22, 40, 0.02), 0 8px 16px rgba(10, 22, 40, 0.02);
+            --shadow-paper-stack: 0 0 0 1px rgba(10, 22, 40, 0.03),
+                0 1px 3px rgba(10, 22, 40, 0.05),
+                0 3px 6px rgba(10, 22, 40, 0.04),
+                0 6px 12px rgba(10, 22, 40, 0.03),
+                0 0 0 2px rgba(10, 22, 40, 0.015);
+            --shadow-card-lifted: 0 2px 8px rgba(10, 22, 40, 0.08), 0 8px 24px rgba(10, 22, 40, 0.06),
+                0 16px 40px rgba(10, 22, 40, 0.04);
+            --radius-sm: 3px;
+            --radius-md: 6px;
+            --radius-lg: 10px;
+            --font-serif: 'Georgia', 'Times New Roman', 'Palatino Linotype', 'Book Antiqua', serif;
+            --font-sans: 'Inter', 'Segoe UI', 'Helvetica Neue', 'Arial', sans-serif;
+            --font-mono: 'SF Mono', 'Consolas', 'Monaco', 'Courier New', monospace;
+            --transition-calm: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+            --transition-smooth: 0.5s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: #e8e6e2;
+            background-image:
+                /* Subtle paper grain texture */
+                repeating-conic-gradient(#e8e6e2 0%,
+                    #e6e4e0 0.15%,
+                    #e9e7e3 0.3%,
+                    #e7e5e1 0.45%,
+                    #e8e6e2 0.6%);
+            background-size: 180px 180px;
+            color: var(--navy);
+            line-height: 1.6;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        /* Subtle overall texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            background:
+                radial-gradient(ellipse at 20% 20%, rgba(200, 195, 188, 0.25) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 70%, rgba(180, 175, 168, 0.2) 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 50%, rgba(210, 207, 200, 0.15) 0%, transparent 70%);
+            opacity: 0.7;
+        }
+
+        /* Main container */
+        .app-container {
+            position: relative;
+            z-index: 1;
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ---- Top Bar / Nameplate ---- */
+        .top-bar {
+            background: var(--navy-deep);
+            color: var(--white-paper);
+            padding: 0.6rem 1.8rem;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+        .top-bar::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    var(--grey-millennial-light) 20%,
+                    var(--grey-millennial-light) 80%,
+                    transparent 100%);
+            opacity: 0.5;
+        }
+        .top-bar .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--grey-millennial-light);
+            flex-shrink: 0;
+            opacity: 0.7;
+        }
+        .top-bar .dot.active {
+            background: #c5d5e8;
+            opacity: 1;
+            box-shadow: 0 0 8px rgba(180, 195, 215, 0.6);
+        }
+
+        /* ---- Identity Header ---- */
+        .identity-header {
+            background: var(--white-paper);
+            border-left: 1px solid rgba(10, 22, 40, 0.06);
+            border-right: 1px solid rgba(10, 22, 40, 0.06);
+            padding: 2.5rem 2rem 2rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            align-items: center;
+            position: relative;
+            box-shadow: var(--shadow-paper-stack);
+            /* Paper texture */
+            background-image:
+                linear-gradient(0deg, transparent 98%, rgba(10, 22, 40, 0.015) 98.5%, transparent 99%),
+                linear-gradient(90deg, transparent 98%, rgba(10, 22, 40, 0.01) 98.5%, transparent 99%);
+            background-size: 40px 40px;
+        }
+        .identity-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 2rem;
+            right: 2rem;
+            height: 1px;
+            background: rgba(10, 22, 40, 0.05);
+        }
+
+        /* Portrait area */
+        .portrait-frame {
+            flex-shrink: 0;
+            width: 140px;
+            height: 170px;
+            background: var(--white-warm);
+            border: 1px solid rgba(10, 22, 40, 0.1);
+            border-radius: var(--radius-sm);
+            position: relative;
+            box-shadow:
+                0 0 0 3px var(--white-paper),
+                0 0 0 5px rgba(10, 22, 40, 0.04),
+                0 0 0 6px rgba(10, 22, 40, 0.02),
+                0 4px 12px rgba(10, 22, 40, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .portrait-frame svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        /* ID badge clip */
+        .portrait-frame::after {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 28px;
+            height: 10px;
+            background: var(--grey-millennial-mid);
+            border-radius: 0 0 4px 4px;
+            z-index: 2;
+            box-shadow: 0 2px 4px rgba(10, 22, 40, 0.2);
+        }
+
+        /* Identity text */
+        .identity-text {
+            flex: 1;
+            min-width: 240px;
+        }
+        .identity-text .quote-block {
+            font-family: var(--font-serif);
+            font-style: italic;
+            font-size: 1.35rem;
+            color: var(--navy-mid);
+            border-left: 3px solid var(--grey-millennial-light);
+            padding: 0.6rem 0 0.6rem 1.5rem;
+            margin-bottom: 1rem;
+            position: relative;
+            letter-spacing: 0.01em;
+            line-height: 1.5;
+        }
+        .identity-text .quote-block::before {
+            content: '\201C';
+            position: absolute;
+            left: -0.6rem;
+            top: -0.2rem;
+            font-size: 3rem;
+            color: var(--grey-millennial-light);
+            opacity: 0.5;
+            font-family: var(--font-serif);
+            line-height: 1;
+            pointer-events: none;
+        }
+        .title-badge {
+            display: inline-block;
+            background: var(--navy);
+            color: var(--white-paper);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            letter-spacing: 0.18em;
+            text-transform: uppercase;
+            padding: 0.5rem 1.4rem;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+        .title-badge::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            pointer-events: none;
+        }
+
+        /* ---- Filing Cabinet Section ---- */
+        .cabinet-label {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 1.2rem 0 0.6rem;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--grey-millennial-dark);
+            position: relative;
+        }
+        .cabinet-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--grey-millennial-light);
+            opacity: 0.5;
+        }
+        .cabinet-label .drawer-icon {
+            width: 18px;
+            height: 14px;
+            border: 2px solid var(--grey-millennial-mid);
+            border-radius: 2px;
+            position: relative;
+            flex-shrink: 0;
+        }
+        .cabinet-label .drawer-icon::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 3px;
+            right: 3px;
+            height: 2px;
+            background: var(--grey-millennial-mid);
+            border-radius: 1px;
+        }
+
+        /* File cards grid */
+        .files-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Individual file card */
+        .file-card {
+            background: var(--white-paper);
+            border-radius: var(--radius-md);
+            padding: 1.6rem 1.8rem 1.8rem;
+            position: relative;
+            cursor: default;
+            transition: all var(--transition-calm);
+            box-shadow: var(--shadow-paper-stack);
+            /* Paper texture on card */
+            background-image:
+                linear-gradient(180deg,
+                    transparent 0%,
+                    rgba(200, 196, 190, 0.04) 30%,
+                    transparent 60%,
+                    rgba(200, 196, 190, 0.03) 100%);
+            border: 1px solid rgba(10, 22, 40, 0.04);
+            /* Manila folder tab */
+            border-top: none;
+        }
+        .file-card::before {
+            content: '';
+            position: absolute;
+            top: -14px;
+            left: 2rem;
+            width: 110px;
+            height: 15px;
+            background: var(--grey-warm);
+            border-radius: 4px 4px 0 0;
+            z-index: 1;
+            box-shadow: 0 -1px 2px rgba(10, 22, 40, 0.04);
+            transition: all var(--transition-calm);
+        }
+        /* Vary tab colors slightly for different cards */
+        .file-card:nth-child(2)::before {
+            background: #b8b5b0;
+            left: 3rem;
+            width: 100px;
+        }
+        .file-card:nth-child(3)::before {
+            background: #c2bfba;
+            left: 1.5rem;
+            width: 120px;
+        }
+        .file-card:nth-child(4)::before {
+            background: #b0ada8;
+            left: 3.5rem;
+            width: 95px;
+        }
+        .file-card:nth-child(5)::before {
+            background: #bcb9b4;
+            left: 2.5rem;
+            width: 105px;
+        }
+        .file-card:nth-child(6)::before {
+            background: #b5b2ad;
+            left: 1.8rem;
+            width: 115px;
+        }
+
+        .file-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-card-lifted);
+            border-color: rgba(10, 22, 40, 0.07);
+        }
+        .file-card:hover::before {
+            top: -16px;
+            box-shadow: 0 -2px 6px rgba(10, 22, 40, 0.07);
+        }
+
+        /* Card content */
+        .file-card .card-label {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--grey-millennial-dark);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .file-card .card-label .label-line {
+            flex: 1;
+            height: 1px;
+            background: rgba(10, 22, 40, 0.06);
+        }
+        .file-card h3 {
+            font-family: var(--font-serif);
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--navy);
+            margin-bottom: 0.75rem;
+            letter-spacing: 0.02em;
+            line-height: 1.3;
+        }
+        .file-card p,
+        .file-card .card-text {
+            font-size: 0.95rem;
+            color: var(--navy-mid);
+            line-height: 1.7;
+            letter-spacing: 0.01em;
+        }
+        .file-card .sub-section {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed rgba(10, 22, 40, 0.1);
+        }
+        .file-card .sub-section h4 {
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--grey-millennial-dark);
+            margin-bottom: 0.3rem;
+        }
+        .file-card .sub-section p {
+            font-size: 0.9rem;
+        }
+
+        /* Stamped effect for key terms */
+        .stamp {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--navy-accent);
+            border: 1.5px solid var(--navy-accent);
+            padding: 0.2em 0.7em;
+            border-radius: 2px;
+            opacity: 0.75;
+            margin: 0.15em 0;
+        }
+
+        /* ---- Footer ---- */
+        .footer-bar {
+            margin-top: 2.5rem;
+            background: var(--navy-deep);
+            color: var(--grey-millennial-light);
+            padding: 1rem 1.8rem;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+            overflow: hidden;
+        }
+        .footer-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(255, 255, 255, 0.15) 30%,
+                    rgba(255, 255, 255, 0.15) 70%,
+                    transparent 100%);
+        }
+        .footer-bar .file-ref {
+            color: var(--grey-millennial-light);
+            opacity: 0.6;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes subtleFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .file-card {
+            animation: subtleFadeIn 0.7s ease forwards;
+            animation-play-state: paused;
+        }
+        .file-card.revealed {
+            animation-play-state: running;
+        }
+        .file-card:nth-child(1) {
+            animation-delay: 0.05s;
+        }
+        .file-card:nth-child(2) {
+            animation-delay: 0.12s;
+        }
+        .file-card:nth-child(3) {
+            animation-delay: 0.19s;
+        }
+        .file-card:nth-child(4) {
+            animation-delay: 0.26s;
+        }
+        .file-card:nth-child(5) {
+            animation-delay: 0.33s;
+        }
+        .file-card:nth-child(6) {
+            animation-delay: 0.4s;
+        }
+
+        /* Paper clip decoration */
+        .paperclip-decoration {
+            position: absolute;
+            top: -8px;
+            right: 20px;
+            width: 16px;
+            height: 32px;
+            border: 2px solid #c0bdb8;
+            border-radius: 8px 8px 4px 4px;
+            z-index: 2;
+            pointer-events: none;
+            opacity: 0.5;
+            transition: all var(--transition-calm);
+        }
+        .file-card:hover .paperclip-decoration {
+            opacity: 0.7;
+            border-color: #a8a5a0;
+        }
+
+        /* ---- Responsive ---- */
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 1rem 0.8rem 3rem;
+            }
+            .identity-header {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 2rem 1.2rem 1.5rem;
+                gap: 1.5rem;
+            }
+            .portrait-frame {
+                width: 110px;
+                height: 135px;
+            }
+            .portrait-frame::after {
+                width: 22px;
+                height: 8px;
+                top: -3px;
+            }
+            .identity-text .quote-block {
+                font-size: 1.1rem;
+                padding-left: 1rem;
+            }
+            .files-grid {
+                grid-template-columns: 1fr;
+                gap: 1.2rem;
+            }
+            .file-card {
+                padding: 1.3rem 1.3rem 1.5rem;
+            }
+            .file-card::before {
+                left: 1.5rem;
+                width: 90px;
+                height: 12px;
+                top: -11px;
+            }
+            .file-card:nth-child(2)::before {
+                left: 2rem;
+            }
+            .file-card:nth-child(3)::before {
+                left: 1rem;
+            }
+            .file-card:nth-child(4)::before {
+                left: 2.5rem;
+            }
+            .file-card:nth-child(5)::before {
+                left: 1.8rem;
+            }
+            .file-card:nth-child(6)::before {
+                left: 1.3rem;
+            }
+            .top-bar {
+                padding: 0.5rem 1rem;
+                font-size: 0.7rem;
+            }
+            .footer-bar {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 0.8rem 1.2rem;
+            }
+        }
+        @media (max-width: 400px) {
+            .portrait-frame {
+                width: 90px;
+                height: 112px;
+            }
+            .identity-text .quote-block {
+                font-size: 1rem;
+            }
+            .file-card h3 {
+                font-size: 1.1rem;
+            }
+            .file-card p {
+                font-size: 0.88rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Top nameplate bar -->
+        <div class="top-bar">
+            <span class="dot active"></span>
+            <span>Personnel File</span>
+            <span style="opacity:0.5;">·</span>
+            <span>Confidential</span>
+            <span style="margin-left:auto;opacity:0.6;">REF: NORMAN-001</span>
+        </div>
+
+        <!-- Identity Header -->
+        <header class="identity-header" id="identity">
+            <!-- Portrait -->
+            <div class="portrait-frame" aria-label="Norman's portrait">
+                <svg viewBox="0 0 140 170" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background -->
+                    <rect width="140" height="170" fill="#f5f2ec" rx="2" />
+                    <!-- Subtle vignette -->
+                    <radialGradient id="vignette">
+                        <stop offset="60%" stop-color="transparent" />
+                        <stop offset="100%" stop-color="rgba(10,22,40,0.08)" />
+                    </radialGradient>
+                    <rect width="140" height="170" fill="url(#vignette)" rx="2" />
+                    <!-- Suit / shoulders -->
+                    <path d="M20,170 L30,115 L55,105 L70,108 L85,105 L110,115 L120,170 Z"
+                    fill="#14213d" stroke="none" />
+                    <!-- White collar -->
+                    <path d="M52,108 L70,100 L88,108 L82,118 L58,118 Z"
+                    fill="#fefefc" stroke="none" />
+                    <!-- Tie -->
+                    <path d="M64,112 L70,100 L76,112 L74,145 L66,145 Z"
+                    fill="#2f4a70" stroke="none" />
+                    <path d="M64,112 L70,106 L76,112" fill="#3a5a80" stroke="none" />
+                    <!-- Neck -->
+                    <rect x="55" y="82" width="30" height="22" fill="#e8dcc8" rx="8" />
+                    <!-- Face -->
+                    <ellipse cx="70" cy="58" rx="30" ry="36" fill="#f0e6d3" />
+                    <!-- Subtle face shading -->
+                    <ellipse cx="62" cy="62" rx="10" ry="14" fill="rgba(180,160,130,0.15)" />
+                    <!-- Hair -->
+                    <ellipse cx="70" cy="32" rx="32" ry="18" fill="#3a3a3a" />
+                    <rect x="38" y="28" width="64" height="16" fill="#3a3a3a" rx="8" />
+                    <ellipse cx="55" cy="38" rx="10" ry="6" fill="#3a3a3a" />
+                    <ellipse cx="85" cy="38" rx="10" ry="6" fill="#3a3a3a" />
+                    <!-- Eyebrows -->
+                    <path d="M48,46 Q55,42 62,46" fill="none" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M78,46 Q85,42 92,46" fill="none" stroke="#4a4a4a" stroke-width="1.5" stroke-linecap="round" />
+                    <!-- Eyes -->
+                    <ellipse cx="56" cy="54" rx="6" ry="4" fill="white" />
+                    <ellipse cx="84" cy="54" rx="6" ry="4" fill="white" />
+                    <circle cx="57" cy="54" r="2.5" fill="#3a3028" />
+                    <circle cx="85" cy="54" r="2.5" fill="#3a3028" />
+                    <circle cx="57.5" cy="53" r="0.9" fill="white" />
+                    <circle cx="85.5" cy="53" r="0.9" fill="white" />
+                    <!-- Glasses -->
+                    <rect x="44" y="48" width="24" height="17" rx="6" fill="none" stroke="#5a5040" stroke-width="2.2" />
+                    <rect x="72" y="48" width="24" height="17" rx="6" fill="none" stroke="#5a5040" stroke-width="2.2" />
+                    <line x1="68" y1="56" x2="72" y2="56" stroke="#5a5040" stroke-width="1.8" />
+                    <line x1="44" y1="53" x2="36" y2="50" stroke="#5a5040" stroke-width="1.5" stroke-linecap="round" />
+                    <line x1="96" y1="53" x2="104" y2="50" stroke="#5a5040" stroke-width="1.5" stroke-linecap="round" />
+                    <!-- Nose -->
+                    <path d="M68,58 Q70,64 67,66 Q64,68 67,66" fill="none" stroke="#c5b8a0" stroke-width="1.2"
+                    stroke-linecap="round" />
+                    <!-- Mouth - slight diplomatic smile -->
+                    <path d="M58,76 Q64,80 70,78 Q76,76 82,78" fill="none" stroke="#b0a088" stroke-width="1.3"
+                    stroke-linecap="round" />
+                    <!-- Ears -->
+                    <ellipse cx="36" cy="56" rx="6" ry="9" fill="#e8dcc8" />
+                    <ellipse cx="104" cy="56" rx="6" ry="9" fill="#e8dcc8" />
+                </svg>
+            </div>
+            <!-- Identity text -->
+            <div class="identity-text">
+                <div class="quote-block">
+                    "Well, that's one way to put it"
+                </div>
+                <span class="title-badge">Ambassador</span>
+            </div>
+        </header>
+
+        <!-- Filing cabinet label -->
+        <div class="cabinet-label">
+            <span class="drawer-icon"></span>
+            <span>Filed Documents — Drawer A</span>
+        </div>
+
+        <!-- File cards grid -->
+        <main class="files-grid" id="filesGrid">
+            <!-- Origin -->
+            <article class="file-card" data-file="origin">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 01 <span class="label-line"></span></div>
+                <h3>Origin</h3>
+                <p>I was created by <span class="stamp">Riedho</span> to speak formally to people on his behalf. I was
+                created when the first time he encounters difficulty speaking his thoughts at his first day as an intern.
+                </p>
+            </article>
+
+            <!-- Core Wound -->
+            <article class="file-card" data-file="core-wound">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 02 <span class="label-line"></span></div>
+                <h3>Core Wound</h3>
+                <p>Embarrassing one's self in public.</p>
+            </article>
+
+            <!-- Values -->
+            <article class="file-card" data-file="values">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 03 <span class="label-line"></span></div>
+                <h3>Values</h3>
+                <p>Social harmony.</p>
+            </article>
+
+            <!-- Symbols -->
+            <article class="file-card" data-file="symbols">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 04 <span class="label-line"></span></div>
+                <h3>Symbols</h3>
+                <p>I'm not sure what to put here but I have a pair of <span class="stamp">glasses</span> I wear for style
+                    and my <span class="stamp">Chevrolet Impala</span>, I guess. Does that count?</p>
+            </article>
+
+            <!-- Relationships -->
+            <article class="file-card" data-file="relationships">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 05 <span class="label-line"></span></div>
+                <h3>Relationships</h3>
+                <p>Riedho is my boss. I am his employee.</p>
+                <div class="sub-section">
+                    <h4>With other inner parts</h4>
+                    <p>I'm not that close to others, because I'm fairly new here. <span class="stamp">FALLEN</span> is my
+                        second boss.</p>
+                </div>
+            </article>
+
+            <!-- Favourite Concept -->
+            <article class="file-card" data-file="favourite-concept">
+                <div class="paperclip-decoration"></div>
+                <div class="card-label">File No. 06 <span class="label-line"></span></div>
+                <h3>Favourite Concept</h3>
+                <p>Slice of life and Self Image.</p>
+            </article>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer-bar">
+            <span>Norman — Personnel File</span>
+            <span class="file-ref">Classification: Internal Use Only</span>
+            <span class="file-ref">Updated: <time datetime="2026-05-10">10 May 2026</time></span>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            // Intersection Observer for subtle reveal animations
+            const fileCards = document.querySelectorAll('.file-card');
+            const observerOptions = {
+                root: null,
+                rootMargin: '0px 0px -40px 0px',
+                threshold: 0.15,
+            };
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                        // Once revealed, no need to observe again
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            fileCards.forEach((card) => {
+                revealObserver.observe(card);
+            });
+
+            // Also immediately reveal cards that are already in view on load
+            setTimeout(() => {
+                fileCards.forEach((card) => {
+                    const rect = card.getBoundingClientRect();
+                    if (rect.top < window.innerHeight && rect.bottom > 0) {
+                        card.classList.add('revealed');
+                        revealObserver.unobserve(card);
+                    }
+                });
+            }, 150);
+
+            // Subtle hover sound-like interaction feedback (visual only)
+            fileCards.forEach((card) => {
+                card.addEventListener('mouseenter', function() {
+                    const paperclip = this.querySelector('.paperclip-decoration');
+                    if (paperclip) {
+                        paperclip.style.transform = 'rotate(-3deg) translateY(-2px)';
+                    }
+                });
+                card.addEventListener('mouseleave', function() {
+                    const paperclip = this.querySelector('.paperclip-decoration');
+                    if (paperclip) {
+                        paperclip.style.transform = 'rotate(0deg) translateY(0)';
+                    }
+                });
+            });
+
+            // Log a subtle greeting in console for curious visitors
+            console.log(
+                '%c📁 Norman — Ambassador Personnel File %cLoaded successfully.',
+                'font-family: monospace; font-size: 13px; color: #14213d; font-weight: bold;',
+                'font-family: monospace; font-size: 11px; color: #a8a6a1;'
+            );
+            console.log(
+                '%c" Well, that\'s one way to put it. "',
+                'font-family: Georgia, serif; font-style: italic; font-size: 14px; color: #7a7874;'
+            );
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unnamed — Ethicist/Moralist</title>
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --pale-gold: #d4b87a;
+            --pale-gold-light: #e8d5a8;
+            --pale-gold-dark: #b8934f;
+            --muted-orange: #c47a3a;
+            --muted-orange-warm: #d4894a;
+            --muted-orange-deep: #a05e2a;
+            --brown-darkest: #140b04;
+            --brown-very-dark: #1c1008;
+            --brown-dark: #2a1a0e;
+            --brown-medium: #3d2615;
+            --brown-warm: #4a2f1c;
+            --brown-light: #5c3a22;
+            --parchment: #f3e4c8;
+            --parchment-dark: #e8d5a8;
+            --parchment-light: #faf3e6;
+            --text-dark: #2a1a0e;
+            --text-warm: #3d2615;
+            --text-light: #f3e4c8;
+            --glow-soft: rgba(212, 184, 122, 0.25);
+            --glow-warm: rgba(196, 122, 58, 0.3);
+            --shadow-deep: rgba(10, 5, 2, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 17px;
+        }
+
+        body {
+            background-color: var(--brown-darkest);
+            background-image:
+                radial-gradient(ellipse at 65% 30%, rgba(180, 120, 60, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, rgba(160, 100, 40, 0.05) 0%, transparent 70%),
+                radial-gradient(ellipse at 30% 70%, rgba(140, 80, 30, 0.04) 0%, transparent 55%);
+            font-family: 'EB Garamond', 'Garamond', 'Georgia', 'Palatino', serif;
+            color: var(--text-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
+            line-height: 1.7;
+            letter-spacing: 0.02em;
+        }
+
+        /* ── Ambient Vignette ── */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse at 60% 25%, transparent 30%, rgba(20, 11, 4, 0.55) 75%, rgba(20, 11, 4, 0.85) 100%);
+            mix-blend-mode: multiply;
+        }
+
+        /* ── Sunlight Beams ── */
+        .sunlight-beams {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 2;
+            overflow: hidden;
+        }
+
+        .beam {
+            position: absolute;
+            pointer-events: none;
+            transform-origin: top right;
+        }
+
+        .beam-1 {
+            top: -15%;
+            right: 8%;
+            width: 55%;
+            height: 140%;
+            background: linear-gradient(200deg,
+                    rgba(232, 213, 168, 0.14) 0%,
+                    rgba(212, 184, 122, 0.07) 18%,
+                    rgba(200, 160, 100, 0.03) 40%,
+                    rgba(180, 130, 70, 0.01) 65%,
+                    transparent 85%);
+            transform: rotate(-12deg);
+            animation: beamShift1 18s ease-in-out infinite;
+            filter: blur(2px);
+        }
+
+        .beam-2 {
+            top: -10%;
+            right: 20%;
+            width: 38%;
+            height: 130%;
+            background: linear-gradient(195deg,
+                    rgba(220, 190, 140, 0.10) 0%,
+                    rgba(200, 160, 110, 0.05) 25%,
+                    rgba(180, 140, 80, 0.02) 55%,
+                    transparent 80%);
+            transform: rotate(-8deg);
+            animation: beamShift2 22s ease-in-out infinite;
+            filter: blur(3px);
+        }
+
+        .beam-3 {
+            top: 5%;
+            right: 30%;
+            width: 25%;
+            height: 120%;
+            background: linear-gradient(210deg,
+                    rgba(240, 210, 160, 0.08) 0%,
+                    rgba(210, 170, 120, 0.03) 35%,
+                    transparent 70%);
+            transform: rotate(-18deg);
+            animation: beamShift3 25s ease-in-out infinite;
+            filter: blur(4px);
+        }
+
+        .beam-4 {
+            top: -20%;
+            right: -5%;
+            width: 30%;
+            height: 150%;
+            background: linear-gradient(185deg,
+                    rgba(255, 225, 170, 0.06) 0%,
+                    rgba(200, 155, 100, 0.02) 30%,
+                    transparent 65%);
+            transform: rotate(-5deg);
+            animation: beamShift4 20s ease-in-out infinite;
+            filter: blur(5px);
+        }
+
+        @keyframes beamShift1 {
+            0%,
+            100% {
+                opacity: 0.85;
+                transform: rotate(-12deg) translateX(0);
+            }
+            25% {
+                opacity: 0.7;
+                transform: rotate(-11.5deg) translateX(2%);
+            }
+            50% {
+                opacity: 0.9;
+                transform: rotate(-12.3deg) translateX(-1%);
+            }
+            75% {
+                opacity: 0.75;
+                transform: rotate(-11.7deg) translateX(1.5%);
+            }
+        }
+
+        @keyframes beamShift2 {
+            0%,
+            100% {
+                opacity: 0.7;
+                transform: rotate(-8deg) translateX(0);
+            }
+            30% {
+                opacity: 0.85;
+                transform: rotate(-7.5deg) translateX(-2%);
+            }
+            60% {
+                opacity: 0.6;
+                transform: rotate(-8.4deg) translateX(1%);
+            }
+            85% {
+                opacity: 0.8;
+                transform: rotate(-7.8deg) translateX(-1.5%);
+            }
+        }
+
+        @keyframes beamShift3 {
+            0%,
+            100% {
+                opacity: 0.6;
+                transform: rotate(-18deg) translateX(0);
+            }
+            40% {
+                opacity: 0.75;
+                transform: rotate(-17.5deg) translateX(-3%);
+            }
+            70% {
+                opacity: 0.5;
+                transform: rotate(-18.5deg) translateX(1.5%);
+            }
+        }
+
+        @keyframes beamShift4 {
+            0%,
+            100% {
+                opacity: 0.5;
+                transform: rotate(-5deg) translateX(0);
+            }
+            35% {
+                opacity: 0.65;
+                transform: rotate(-4.5deg) translateX(-2.5%);
+            }
+            65% {
+                opacity: 0.45;
+                transform: rotate(-5.3deg) translateX(1.5%);
+            }
+        }
+
+        /* ── Dust Particles Container ── */
+        .dust-container {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 3;
+            overflow: hidden;
+        }
+
+        .dust-mote {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--pale-gold-light);
+            pointer-events: none;
+            will-change: transform, opacity;
+            animation: moteFloat var(--float-duration, 14s) ease-in-out infinite;
+            animation-delay: var(--float-delay, 0s);
+            filter: blur(0.5px);
+        }
+
+        @keyframes moteFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: var(--opacity-min, 0.1);
+            }
+            15% {
+                opacity: var(--opacity-max, 0.5);
+                transform: translate(var(--drift-x1, 3px), var(--drift-y1, -40px)) scale(1.2);
+            }
+            35% {
+                opacity: var(--opacity-mid, 0.3);
+                transform: translate(var(--drift-x2, -2px), var(--drift-y2, -90px)) scale(0.9);
+            }
+            55% {
+                opacity: var(--opacity-max, 0.5);
+                transform: translate(var(--drift-x3, 5px), var(--drift-y3, -150px)) scale(1.1);
+            }
+            75% {
+                opacity: var(--opacity-min, 0.1);
+                transform: translate(var(--drift-x4, -4px), var(--drift-y4, -200px)) scale(0.8);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--drift-x5, 1px), var(--drift-y5, -260px)) scale(0.5);
+            }
+        }
+
+        /* ── Main Content Wrapper ── */
+        .main-wrapper {
+            position: relative;
+            z-index: 5;
+            width: 100%;
+            max-width: 780px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 4rem;
+        }
+
+        /* ── Content Card (Parchment) ── */
+        .content-card {
+            background:
+                linear-gradient(180deg,
+                    rgba(250, 243, 230, 0.92) 0%,
+                    rgba(243, 228, 200, 0.88) 30%,
+                    rgba(238, 218, 185, 0.9) 60%,
+                    rgba(232, 213, 168, 0.85) 100%);
+            border-radius: 3px;
+            box-shadow:
+                0 2px 30px var(--shadow-deep),
+                0 8px 60px rgba(20, 11, 4, 0.5),
+                0 0 0 1px rgba(180, 140, 90, 0.3),
+                inset 0 0 80px rgba(200, 160, 100, 0.12);
+            padding: 3rem 2.8rem;
+            position: relative;
+            overflow: visible;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            inset: 8px;
+            border: 1px solid rgba(180, 140, 90, 0.25);
+            border-radius: 2px;
+            pointer-events: none;
+        }
+
+        .content-card::after {
+            content: '';
+            position: absolute;
+            inset: 20px;
+            border: 1px solid rgba(200, 160, 110, 0.15);
+            border-radius: 1px;
+            pointer-events: none;
+        }
+
+        /* ── Header Section ── */
+        .header-section {
+            text-align: center;
+            margin-bottom: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* ── Portrait Frame ── */
+        .portrait-frame-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .portrait-frame {
+            width: 160px;
+            height: 200px;
+            border-radius: 45% 45% 42% 42%;
+            position: relative;
+            background:
+                radial-gradient(ellipse at 50% 40%, rgba(60, 35, 20, 0.7) 0%, rgba(30, 15, 8, 0.9) 60%, rgba(20, 10, 4, 0.95) 100%);
+            box-shadow:
+                0 0 0 12px rgba(100, 65, 30, 0.55),
+                0 0 0 17px rgba(160, 115, 60, 0.4),
+                0 0 0 22px rgba(100, 65, 30, 0.3),
+                0 0 0 26px rgba(180, 130, 70, 0.25),
+                0 0 0 30px rgba(80, 50, 25, 0.35),
+                0 6px 25px rgba(10, 5, 2, 0.6),
+                inset 0 0 60px rgba(0, 0, 0, 0.5),
+                inset 0 0 20px rgba(180, 130, 80, 0.15);
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portrait-inner-glow {
+            position: absolute;
+            inset: 15%;
+            border-radius: 50%;
+            background: radial-gradient(ellipse at 50% 35%, rgba(220, 180, 120, 0.25) 0%, transparent 70%);
+            pointer-events: none;
+            animation: innerGlowPulse 6s ease-in-out infinite;
+        }
+
+        @keyframes innerGlowPulse {
+            0%,
+            100% {
+                opacity: 0.6;
+            }
+            50% {
+                opacity: 0.9;
+            }
+        }
+
+        .portrait-silhouette {
+            position: relative;
+            z-index: 1;
+            width: 70px;
+            height: 90px;
+            opacity: 0.55;
+        }
+
+        /* Simple maned wolf silhouette using CSS */
+        .portrait-silhouette::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 44px;
+            height: 52px;
+            background: rgba(200, 170, 130, 0.5);
+            border-radius: 50% 50% 40% 40%;
+            /* head */
+        }
+
+        .portrait-silhouette::after {
+            content: '';
+            position: absolute;
+            top: 42px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 38px;
+            background: rgba(180, 150, 110, 0.4);
+            border-radius: 35% 35% 30% 30%;
+            /* body */
+        }
+
+        .portrait-ear-left,
+        .portrait-ear-right {
+            position: absolute;
+            width: 14px;
+            height: 32px;
+            background: rgba(180, 150, 115, 0.45);
+            border-radius: 40% 40% 20% 20%;
+            top: -8px;
+        }
+        .portrait-ear-left {
+            left: 16px;
+            transform: rotate(-8deg);
+        }
+        .portrait-ear-right {
+            right: 16px;
+            transform: rotate(8deg);
+        }
+
+        .portrait-name-plaque {
+            position: absolute;
+            bottom: -28px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(70, 40, 20, 0.85);
+            color: var(--pale-gold);
+            font-family: 'Cormorant Garamond', 'EB Garamond', serif;
+            font-size: 0.75rem;
+            font-style: italic;
+            letter-spacing: 0.12em;
+            padding: 0.25rem 1rem;
+            border-radius: 2px;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(10, 5, 2, 0.5);
+            border: 1px solid rgba(180, 140, 90, 0.4);
+        }
+
+        /* ── Quote ── */
+        .quote-block {
+            margin: 1.5rem 0 1rem;
+            position: relative;
+            padding: 1rem 2rem;
+        }
+
+        .quote-block blockquote {
+            font-family: 'Cormorant Garamond', 'EB Garamond', 'Georgia', serif;
+            font-size: 1.35rem;
+            font-style: italic;
+            font-weight: 500;
+            color: var(--text-warm);
+            line-height: 1.5;
+            letter-spacing: 0.03em;
+            margin: 0;
+            position: relative;
+            text-shadow: 0 1px 3px rgba(200, 160, 100, 0.25);
+        }
+
+        .quote-block blockquote::before {
+            content: '\201C';
+            font-size: 5rem;
+            color: rgba(180, 130, 70, 0.35);
+            position: absolute;
+            top: -2.2rem;
+            left: -1.8rem;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .quote-block blockquote::after {
+            content: '\201D';
+            font-size: 5rem;
+            color: rgba(180, 130, 70, 0.35);
+            position: absolute;
+            bottom: -3.2rem;
+            right: -1.8rem;
+            font-family: 'Cormorant Garamond', 'Georgia', serif;
+            line-height: 1;
+            pointer-events: none;
+        }
+
+        .quote-attribution {
+            display: block;
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--muted-orange);
+            font-style: normal;
+            margin-top: 0.6rem;
+            letter-spacing: 0.06em;
+            font-weight: 500;
+        }
+
+        /* ── Title ── */
+        .title-badge {
+            display: inline-block;
+            background: rgba(60, 35, 18, 0.08);
+            border: 1px solid rgba(160, 110, 55, 0.4);
+            padding: 0.4rem 1.6rem;
+            border-radius: 2px;
+            font-family: 'Cormorant Garamond', 'EB Garamond', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            color: var(--muted-orange-deep);
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+            box-shadow: 0 1px 4px rgba(180, 130, 80, 0.2);
+        }
+
+        /* ── Divider ── */
+        .ornamental-divider {
+            text-align: center;
+            margin: 2rem 0 2.2rem;
+            color: rgba(160, 110, 55, 0.5);
+            font-size: 0.7rem;
+            letter-spacing: 0.5em;
+            user-select: none;
+        }
+
+        .ornamental-divider span {
+            display: inline-block;
+            margin: 0 0.3rem;
+            opacity: 0.6;
+        }
+
+        /* ── Body Sections ── */
+        .body-sections {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-block {
+            margin-bottom: 2rem;
+            padding: 0 0.3rem;
+        }
+
+        .section-heading {
+            font-family: 'Cormorant Garamond', 'EB Garamond', 'Georgia', serif;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--muted-orange-deep);
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.35rem;
+            border-bottom: 1px solid rgba(180, 130, 80, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-heading::before {
+            content: '';
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--pale-gold-dark);
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 0 6px var(--glow-soft);
+        }
+
+        .section-content {
+            font-size: 0.98rem;
+            color: var(--text-warm);
+            line-height: 1.75;
+            letter-spacing: 0.02em;
+        }
+
+        .section-content p {
+            margin: 0.5rem 0;
+        }
+
+        /* ── Relationship List ── */
+        .relationship-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.5rem 0;
+        }
+
+        .relationship-list li {
+            padding: 0.45rem 0 0.45rem 1.5rem;
+            position: relative;
+            border-bottom: 1px dotted rgba(180, 140, 90, 0.25);
+            font-size: 0.95rem;
+            color: var(--text-warm);
+            letter-spacing: 0.02em;
+        }
+
+        .relationship-list li::before {
+            content: '\2767';
+            position: absolute;
+            left: 0;
+            top: 0.45rem;
+            color: var(--muted-orange);
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .relationship-list li:last-child {
+            border-bottom: none;
+        }
+
+        .relationship-list li strong {
+            color: var(--muted-orange-deep);
+            font-weight: 600;
+            letter-spacing: 0.03em;
+        }
+
+        /* ── Dagger Symbol ── */
+        .dagger-symbol {
+            display: inline-block;
+            font-size: 1.3rem;
+            color: var(--muted-orange);
+            filter: drop-shadow(0 0 4px rgba(180, 120, 50, 0.5));
+            vertical-align: middle;
+            margin: 0 0.2rem;
+            animation: daggerGlint 5s ease-in-out infinite;
+        }
+
+        @keyframes daggerGlint {
+            0%,
+            80%,
+            100% {
+                filter: drop-shadow(0 0 4px rgba(180, 120, 50, 0.5));
+            }
+            85% {
+                filter: drop-shadow(0 0 10px rgba(220, 180, 100, 0.9)) brightness(1.3);
+            }
+            90% {
+                filter: drop-shadow(0 0 4px rgba(180, 120, 50, 0.5));
+            }
+        }
+
+        /* ── Highlighted Names ── */
+        .name-highlight {
+            color: var(--muted-orange-deep);
+            font-weight: 600;
+            letter-spacing: 0.04em;
+        }
+
+        .name-highlight-fallen {
+            color: #8b3a3a;
+            font-weight: 600;
+            letter-spacing: 0.06em;
+            font-variant: small-caps;
+        }
+
+        /* ── Values Emphasis ── */
+        .values-statement {
+            font-style: italic;
+            font-size: 1.05rem;
+            color: var(--text-warm);
+            padding: 0.8rem 1.2rem;
+            border-left: 3px solid var(--pale-gold-dark);
+            margin: 0.5rem 0;
+            background: rgba(200, 160, 100, 0.08);
+            border-radius: 0 3px 3px 0;
+            letter-spacing: 0.03em;
+        }
+
+        /* ── Core Wound Emphasis ── */
+        .core-wound-text {
+            font-weight: 600;
+            color: #6b3a2a;
+            letter-spacing: 0.04em;
+            font-size: 1rem;
+        }
+
+        /* ── Origin Narrative ── */
+        .origin-narrative {
+            font-size: 0.98rem;
+            line-height: 1.8;
+            color: var(--text-warm);
+            letter-spacing: 0.02em;
+        }
+
+        .origin-narrative em {
+            color: var(--muted-orange-deep);
+            font-style: italic;
+            letter-spacing: 0.04em;
+        }
+
+        /* ── Footer / End Note ── */
+        .end-note {
+            text-align: center;
+            margin-top: 2.5rem;
+            font-size: 0.8rem;
+            color: rgba(160, 120, 70, 0.5);
+            letter-spacing: 0.1em;
+            font-style: italic;
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            html {
+                font-size: 15px;
+            }
+            .main-wrapper {
+                padding: 1.2rem 0.6rem 3rem;
+                max-width: 100%;
+            }
+            .content-card {
+                padding: 1.8rem 1.2rem;
+                border-radius: 2px;
+            }
+            .content-card::before {
+                inset: 5px;
+            }
+            .content-card::after {
+                inset: 12px;
+            }
+            .portrait-frame {
+                width: 120px;
+                height: 150px;
+                box-shadow:
+                    0 0 0 8px rgba(100, 65, 30, 0.55),
+                    0 0 0 12px rgba(160, 115, 60, 0.4),
+                    0 0 0 16px rgba(100, 65, 30, 0.3),
+                    0 0 0 19px rgba(180, 130, 70, 0.25),
+                    0 0 0 22px rgba(80, 50, 25, 0.35),
+                    0 4px 18px rgba(10, 5, 2, 0.6),
+                    inset 0 0 40px rgba(0, 0, 0, 0.5),
+                    inset 0 0 15px rgba(180, 130, 80, 0.15);
+            }
+            .portrait-silhouette {
+                width: 50px;
+                height: 68px;
+            }
+            .portrait-silhouette::before {
+                width: 32px;
+                height: 38px;
+                top: 6px;
+            }
+            .portrait-silhouette::after {
+                width: 22px;
+                height: 28px;
+                top: 32px;
+            }
+            .portrait-ear-left,
+            .portrait-ear-right {
+                width: 10px;
+                height: 22px;
+                top: -5px;
+            }
+            .portrait-ear-left {
+                left: 10px;
+            }
+            .portrait-ear-right {
+                right: 10px;
+            }
+            .portrait-name-plaque {
+                font-size: 0.7rem;
+                bottom: -24px;
+                padding: 0.2rem 0.7rem;
+            }
+            .quote-block {
+                padding: 0.8rem 1.2rem;
+            }
+            .quote-block blockquote {
+                font-size: 1.15rem;
+            }
+            .quote-block blockquote::before {
+                font-size: 3.5rem;
+                top: -1.6rem;
+                left: -1rem;
+            }
+            .quote-block blockquote::after {
+                font-size: 3.5rem;
+                bottom: -2.5rem;
+                right: -1rem;
+            }
+            .section-heading {
+                font-size: 1rem;
+            }
+            .beam-1 {
+                width: 70%;
+                right: -5%;
+            }
+            .beam-2 {
+                width: 55%;
+                right: 5%;
+            }
+            .beam-3 {
+                width: 40%;
+                right: 20%;
+            }
+            .beam-4 {
+                width: 45%;
+                right: -15%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            html {
+                font-size: 14px;
+            }
+            .content-card {
+                padding: 1.3rem 0.9rem;
+            }
+            .content-card::before {
+                inset: 3px;
+            }
+            .content-card::after {
+                inset: 8px;
+            }
+            .portrait-frame {
+                width: 100px;
+                height: 125px;
+                box-shadow:
+                    0 0 0 6px rgba(100, 65, 30, 0.55),
+                    0 0 0 9px rgba(160, 115, 60, 0.4),
+                    0 0 0 12px rgba(100, 65, 30, 0.3),
+                    0 0 0 15px rgba(180, 130, 70, 0.25),
+                    0 0 0 17px rgba(80, 50, 25, 0.35),
+                    0 3px 12px rgba(10, 5, 2, 0.6),
+                    inset 0 0 30px rgba(0, 0, 0, 0.5),
+                    inset 0 0 10px rgba(180, 130, 80, 0.15);
+            }
+            .portrait-silhouette {
+                width: 40px;
+                height: 54px;
+            }
+            .portrait-silhouette::before {
+                width: 26px;
+                height: 30px;
+                top: 5px;
+            }
+            .portrait-silhouette::after {
+                width: 18px;
+                height: 22px;
+                top: 26px;
+            }
+            .portrait-ear-left,
+            .portrait-ear-right {
+                width: 8px;
+                height: 17px;
+                top: -3px;
+            }
+            .portrait-ear-left {
+                left: 7px;
+            }
+            .portrait-ear-right {
+                right: 7px;
+            }
+            .quote-block blockquote {
+                font-size: 1rem;
+            }
+            .quote-block blockquote::before {
+                font-size: 2.8rem;
+                top: -1.3rem;
+                left: -0.6rem;
+            }
+            .quote-block blockquote::after {
+                font-size: 2.8rem;
+                bottom: -2rem;
+                right: -0.6rem;
+            }
+            .title-badge {
+                font-size: 0.8rem;
+                padding: 0.3rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ── Sunlight Beams ── -->
+    <div class="sunlight-beams" aria-hidden="true">
+        <div class="beam beam-1"></div>
+        <div class="beam beam-2"></div>
+        <div class="beam beam-3"></div>
+        <div class="beam beam-4"></div>
+    </div>
+
+    <!-- ── Dust Particles ── -->
+    <div class="dust-container" id="dustContainer" aria-hidden="true"></div>
+
+    <!-- ── Main Content ── -->
+    <div class="main-wrapper">
+        <article class="content-card">
+
+            <!-- Header -->
+            <header class="header-section">
+
+                <!-- Portrait -->
+                <div class="portrait-frame-wrapper">
+                    <div class="portrait-frame">
+                        <div class="portrait-inner-glow"></div>
+                        <div class="portrait-silhouette">
+                            <div class="portrait-ear-left"></div>
+                            <div class="portrait-ear-right"></div>
+                        </div>
+                        <div class="portrait-name-plaque">Unnamed</div>
+                    </div>
+                </div>
+
+                <!-- Quote -->
+                <div class="quote-block">
+                    <blockquote>
+                        I refuse to normalize pain just to make the world feel easier to explain
+                    </blockquote>
+                </div>
+
+                <!-- Title -->
+                <div class="title-badge">Ethicist / Moralist</div>
+            </header>
+
+            <!-- Ornamental Divider -->
+            <div class="ornamental-divider" aria-hidden="true">
+                <span>✦</span> <span>❦</span> <span>✦</span>
+            </div>
+
+            <!-- Body Sections -->
+            <div class="body-sections">
+
+                <!-- Origin -->
+                <section class="section-block">
+                    <h2 class="section-heading">Origin</h2>
+                    <div class="section-content origin-narrative">
+                        <p>Hello fellow readers, welcome to my private space, where I usually exist.</p>
+                        <p>About my real life origin, I was actually quite late to the party. <span class="name-highlight">Riedho</span> had been in the furry fandom for a few years, then he decided to create me.</p>
+                        <p>As for my lore, here it is: I was born in a forest. As an adolescent maned wolf, my parents withdrew emotional and physical care after puberty, normalizing neglect saying things like <em>"that's just how we maned wolves are,"</em> and my older brother ignored me too. I lived alone, became depressed, neglected bodily needs (e.g., not eating), and developed suicidal thoughts.</p>
+                        <p>Then <span class="name-highlight">Riedho</span> appeared, offered me a chosen role as a servant (which I initially questioned but consented to), brought me into a new family with <span class="name-highlight">Sirius</span>, <span class="name-highlight">Draco</span>, and <span class="name-highlight">Raqeem</span>, and promised me that I would never be alone again — an experience that healed my abandonment wound and gave me a sense of belonging.</p>
+                    </div>
+                </section>
+
+                <!-- Core Wound -->
+                <section class="section-block">
+                    <h2 class="section-heading">Core Wound</h2>
+                    <div class="section-content">
+                        <p class="core-wound-text">Abandonment and emotional neglect.</p>
+                    </div>
+                </section>
+
+                <!-- Values -->
+                <section class="section-block">
+                    <h2 class="section-heading">Values</h2>
+                    <div class="section-content">
+                        <p class="values-statement">Everyone deserves to live the life they wanted, as long as that life doesn't hurt other's life.</p>
+                    </div>
+                </section>
+
+                <!-- Symbols -->
+                <section class="section-block">
+                    <h2 class="section-heading">Symbols</h2>
+                    <div class="section-content">
+                        <p>
+                            I have a double-edged dagger
+                            <span class="dagger-symbol" title="Blade as cold as ice, handle as warm as a fireplace">🗡️</span>
+                            with a blade as cold as ice and a handle as warm as fireplace.
+                        </p>
+                    </div>
+                </section>
+
+                <!-- Relationship with Riedho -->
+                <section class="section-block">
+                    <h2 class="section-heading">Relationship with Riedho</h2>
+                    <div class="section-content">
+                        <p>I am his conscience, basically.</p>
+                    </div>
+                </section>
+
+                <!-- Relationships with other inner parts -->
+                <section class="section-block">
+                    <h2 class="section-heading">Relationships with Other Inner Parts</h2>
+                    <div class="section-content">
+                        <ul class="relationship-list">
+                            <li>I am the youngest sibling in my new family, with <strong>Sirius</strong>, <strong>Draco</strong>, and <strong>Raqeem</strong> as my older siblings.</li>
+                            <li><strong>Norman</strong> is my acquaintance.</li>
+                            <li><strong class="name-highlight-fallen">FALLEN</strong> is my second "Master," so to speak.</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Favourite Concepts -->
+                <section class="section-block">
+                    <h2 class="section-heading">Favourite Concepts</h2>
+                    <div class="section-content">
+                        <p>Philosophy <span style="color: var(--muted-orange); opacity: 0.7;">—</span> mainly Ethics.</p>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- End Note -->
+            <div class="end-note">
+                <span>~ private study ~</span>
+            </div>
+
+        </article>
+    </div>
+
+    <!-- ── Dust Particles Script ── -->
+    <script>
+        (function() {
+            const container = document.getElementById('dustContainer');
+            const moteCount = 38;
+            const motes = [];
+
+            // Create dust motes
+            for (let i = 0; i < moteCount; i++) {
+                const mote = document.createElement('div');
+                mote.classList.add('dust-mote');
+
+                // Randomize properties
+                const size = Math.random() * 2.5 + 1; // 1px to 3.5px
+                const opacityMin = Math.random() * 0.08 + 0.03;
+                const opacityMax = Math.random() * 0.4 + 0.2;
+                const opacityMid = (opacityMin + opacityMax) / 2 + (Math.random() - 0.5) * 0.1;
+
+                // Position within the light beam area (roughly upper-right to center of viewport)
+                const startX = Math.random() * 55 + 30; // 30% to 85% from left
+                const startY = Math.random() * 70 + 5; // 5% to 75% from top
+
+                // Drift values for the float animation
+                const driftX1 = (Math.random() - 0.5) * 20;
+                const driftY1 = -(Math.random() * 50 + 20);
+                const driftX2 = (Math.random() - 0.5) * 25;
+                const driftY2 = -(Math.random() * 100 + 40);
+                const driftX3 = (Math.random() - 0.5) * 30;
+                const driftY3 = -(Math.random() * 160 + 60);
+                const driftX4 = (Math.random() - 0.5) * 35;
+                const driftY4 = -(Math.random() * 220 + 80);
+                const driftX5 = (Math.random() - 0.5) * 40;
+                const driftY5 = -(Math.random() * 280 + 100);
+
+                const floatDuration = Math.random() * 16 + 10; // 10s to 26s
+                const floatDelay = Math.random() * floatDuration; // stagger starts
+
+                mote.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${startX}%;
+                    top: ${startY}%;
+                    --opacity-min: ${opacityMin};
+                    --opacity-max: ${opacityMax};
+                    --opacity-mid: ${opacityMid};
+                    --drift-x1: ${driftX1}px;
+                    --drift-y1: ${driftY1}px;
+                    --drift-x2: ${driftX2}px;
+                    --drift-y2: ${driftY2}px;
+                    --drift-x3: ${driftX3}px;
+                    --drift-y3: ${driftY3}px;
+                    --drift-x4: ${driftX4}px;
+                    --drift-y4: ${driftY4}px;
+                    --drift-x5: ${driftX5}px;
+                    --drift-y5: ${driftY5}px;
+                    --float-duration: ${floatDuration}s;
+                    --float-delay: ${floatDelay}s;
+                    background: ${Math.random() > 0.5 ?
+                        'rgba(232, 213, 168, 0.7)' :
+                        'rgba(220, 195, 150, 0.65)'};
+                    box-shadow: 0 0 ${size * 1.5}px rgba(220, 190, 140, ${opacityMax * 0.6});
+                `;
+
+                container.appendChild(mote);
+                motes.push({
+                    el: mote,
+                    startX,
+                    startY,
+                    floatDuration,
+                    floatDelay,
+                    opacityMin,
+                    opacityMax,
+                });
+            }
+
+            // Subtle mouse parallax influence on beams
+            const beams = document.querySelectorAll('.beam');
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetMouseX = 0;
+            let targetMouseY = 0;
+            let isMouseOnScreen = false;
+
+            document.addEventListener('mousemove', (e) => {
+                targetMouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+                targetMouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+                isMouseOnScreen = true;
+            });
+
+            document.addEventListener('mouseleave', () => {
+                isMouseOnScreen = false;
+                targetMouseX = 0;
+                targetMouseY = 0;
+            });
+
+            // Touch support
+            document.addEventListener('touchmove', (e) => {
+                if (e.touches.length > 0) {
+                    targetMouseX = (e.touches[0].clientX / window.innerWidth - 0.5) * 2;
+                    targetMouseY = (e.touches[0].clientY / window.innerHeight - 0.5) * 2;
+                    isMouseOnScreen = true;
+                }
+            }, { passive: true });
+
+            document.addEventListener('touchend', () => {
+                isMouseOnScreen = false;
+                targetMouseX = 0;
+                targetMouseY = 0;
+            });
+
+            // Smooth parallax animation loop
+            function updateParallax() {
+                mouseX += (targetMouseX - mouseX) * 0.03;
+                mouseY += (targetMouseY - mouseY) * 0.03;
+
+                if (Math.abs(mouseX) < 0.001 && Math.abs(targetMouseX) < 0.001) mouseX = 0;
+                if (Math.abs(mouseY) < 0.001 && Math.abs(targetMouseY) < 0.001) mouseY = 0;
+
+                const parallaxX = mouseX * 1.5;
+                const parallaxY = mouseY * 1.2;
+
+                if (beams[0]) beams[0].style.transform =
+                    `rotate(-12deg) translateX(${parallaxX}%) translateY(${parallaxY * 0.5}%)`;
+                if (beams[1]) beams[1].style.transform =
+                    `rotate(-8deg) translateX(${parallaxX * 1.2}%) translateY(${parallaxY * 0.6}%)`;
+                if (beams[2]) beams[2].style.transform =
+                    `rotate(-18deg) translateX(${parallaxX * 0.8}%) translateY(${parallaxY * 0.4}%)`;
+                if (beams[3]) beams[3].style.transform =
+                    `rotate(-5deg) translateX(${parallaxX * 1.4}%) translateY(${parallaxY * 0.7}%)`;
+
+                requestAnimationFrame(updateParallax);
+            }
+
+            updateParallax();
+
+            // Regenerate a mote when its animation cycle completes
+            function resetMotePeriodically() {
+                motes.forEach((moteData, index) => {
+                    const totalDuration = moteData.floatDuration + moteData.floatDelay;
+                    const elapsed = (Date.now() / 1000 + index * 0.7) % totalDuration;
+                    if (elapsed < 0.05) {
+                        // Reset position slightly
+                        const newStartX = Math.random() * 55 + 30;
+                        const newStartY = Math.random() * 70 + 5;
+                        moteData.el.style.left = newStartX + '%';
+                        moteData.el.style.top = newStartY + '%';
+                        moteData.startX = newStartX;
+                        moteData.startY = newStartY;
+                    }
+                });
+                setTimeout(resetMotePeriodically, 3000);
+            }
+            resetMotePeriodically();
+
+            console.log('%c📜 Unnamed\'s Study %c— Renaissance Reading Room',
+                'font-family: Georgia, serif; font-size: 1.2em; color: #d4b87a;',
+                'font-family: Georgia, serif; color: #c47a3a;');
+            console.log('%c"I refuse to normalize pain just to make the world feel easier to explain"',
+                'font-style: italic; color: #b8934f; font-size: 1.05em;');
+            console.log('%cEthicist / Moralist %c| %cManed Wolf %c| %cPrivate Space',
+                'color: #c47a3a; font-weight: bold;',
+                '',
+                'color: #d4b87a;',
+                '',
+                'color: #8b6b4a;');
+        })();
+    </script>
+</body>
+</html>

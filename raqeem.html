@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raqeem — Physical Guardian</title>
+    <style>
+        :root {
+            --soft-pink: #f2c4c9;
+            --soft-pink-light: #fde8ec;
+            --brown: #8b6b4a;
+            --brown-light: #b8976e;
+            --brown-dark: #6b4f35;
+            --pastel-green: #c1d5c1;
+            --pastel-green-light: #dce8dc;
+            --soft-lavender: #d4c5e2;
+            --soft-lavender-light: #e8def2;
+            --cream: #fdf6f0;
+            --text-dark: #3d2e1f;
+            --text-medium: #5c4a35;
+            --card-bg: rgba(255, 250, 245, 0.85);
+            --card-border: rgba(180, 160, 140, 0.4);
+            --shadow-soft: 0 4px 24px rgba(100, 70, 40, 0.12);
+            --shadow-card: 0 8px 32px rgba(80, 50, 30, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Georgia', 'Times New Roman', 'Noto Serif', serif;
+            background-color: #fdf3ee;
+            color: var(--text-dark);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.7;
+            background-image:
+                radial-gradient(ellipse at 20% 10%, var(--soft-pink-light) 0%, transparent 55%),
+                radial-gradient(ellipse at 75% 25%, var(--soft-lavender-light) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 60%, var(--pastel-green-light) 0%, transparent 50%),
+                radial-gradient(ellipse at 85% 80%, var(--soft-pink-light) 0%, transparent 45%),
+                radial-gradient(ellipse at 15% 70%, var(--soft-lavender) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* ── Cloth/Fabric Texture Overlay ── */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.06;
+            background-image: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 107, 74, 0.5) 2px,
+                    rgba(139, 107, 74, 0.5) 3px),
+                repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 2px,
+                    rgba(139, 107, 74, 0.35) 2px,
+                    rgba(139, 107, 74, 0.35) 3px);
+        }
+
+        /* ── Wind Streak Container ── */
+        .wind-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .wind-streak {
+            position: absolute;
+            height: 1.5px;
+            background: linear-gradient(90deg,
+                    transparent 0%,
+                    rgba(200, 185, 170, 0.5) 20%,
+                    rgba(220, 210, 200, 0.6) 50%,
+                    rgba(200, 185, 170, 0.3) 80%,
+                    transparent 100%);
+            border-radius: 1px;
+            animation: windBlow linear infinite;
+            opacity: 0;
+        }
+
+        .wind-streak:nth-child(1) {
+            top: 8%;
+            width: 60%;
+            left: -60%;
+            animation-duration: 7s;
+            animation-delay: 0s;
+            height: 1px;
+        }
+        .wind-streak:nth-child(2) {
+            top: 18%;
+            width: 45%;
+            left: -45%;
+            animation-duration: 9s;
+            animation-delay: 2s;
+            height: 2px;
+        }
+        .wind-streak:nth-child(3) {
+            top: 28%;
+            width: 55%;
+            left: -55%;
+            animation-duration: 8s;
+            animation-delay: 4s;
+            height: 1px;
+        }
+        .wind-streak:nth-child(4) {
+            top: 38%;
+            width: 70%;
+            left: -70%;
+            animation-duration: 10s;
+            animation-delay: 1s;
+            height: 1.5px;
+        }
+        .wind-streak:nth-child(5) {
+            top: 50%;
+            width: 40%;
+            left: -40%;
+            animation-duration: 6.5s;
+            animation-delay: 3s;
+            height: 2.5px;
+        }
+        .wind-streak:nth-child(6) {
+            top: 62%;
+            width: 65%;
+            left: -65%;
+            animation-duration: 8.5s;
+            animation-delay: 5s;
+            height: 1px;
+        }
+        .wind-streak:nth-child(7) {
+            top: 74%;
+            width: 50%;
+            left: -50%;
+            animation-duration: 7.5s;
+            animation-delay: 1.5s;
+            height: 1.5px;
+        }
+        .wind-streak:nth-child(8) {
+            top: 85%;
+            width: 55%;
+            left: -55%;
+            animation-duration: 9.5s;
+            animation-delay: 3.5s;
+            height: 1px;
+        }
+        .wind-streak:nth-child(9) {
+            top: 92%;
+            width: 35%;
+            left: -35%;
+            animation-duration: 6s;
+            animation-delay: 6s;
+            height: 2px;
+        }
+
+        @keyframes windBlow {
+            0% {
+                transform: translateX(0) translateY(0);
+                opacity: 0;
+            }
+            8% {
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateX(calc(100vw + 100%)) translateY(-8px);
+                opacity: 0.5;
+            }
+            40% {
+                opacity: 0.6;
+            }
+            55% {
+                transform: translateX(calc(200vw + 200%)) translateY(5px);
+                opacity: 0.15;
+            }
+            70% {
+                opacity: 0;
+            }
+            100% {
+                transform: translateX(calc(280vw + 280%)) translateY(-3px);
+                opacity: 0;
+            }
+        }
+
+        /* ── Floating Petals ── */
+        .petal {
+            position: fixed;
+            pointer-events: none;
+            z-index: 2;
+            width: 12px;
+            height: 16px;
+            border-radius: 50% 0 50% 0;
+            opacity: 0;
+            animation: petalFloat linear infinite;
+        }
+
+        @keyframes petalFloat {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(0.6);
+                opacity: 0;
+            }
+            5% {
+                opacity: 0.8;
+            }
+            30% {
+                transform: translate(120px, -60px) rotate(120deg) scale(1);
+                opacity: 0.55;
+            }
+            60% {
+                transform: translate(250px, -140px) rotate(250deg) scale(0.7);
+                opacity: 0.25;
+            }
+            85% {
+                transform: translate(380px, -200px) rotate(380deg) scale(0.3);
+                opacity: 0.05;
+            }
+            100% {
+                transform: translate(500px, -280px) rotate(500deg) scale(0.1);
+                opacity: 0;
+            }
+        }
+
+        /* ── Tea Steam ── */
+        .tea-steam-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .tea-cup {
+            position: relative;
+            width: 50px;
+            height: 38px;
+            background: var(--cream);
+            border: 2px solid var(--brown-light);
+            border-radius: 8px 8px 18px 18px;
+            box-shadow: 0 3px 10px rgba(100, 70, 40, 0.2);
+        }
+        .tea-cup::before {
+            content: '';
+            position: absolute;
+            top: 6px;
+            left: 10px;
+            right: 10px;
+            height: 10px;
+            background: rgba(180, 140, 100, 0.5);
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) inset;
+        }
+        .tea-cup::after {
+            content: '';
+            position: absolute;
+            right: -14px;
+            top: 10px;
+            width: 16px;
+            height: 14px;
+            border: 2px solid var(--brown-light);
+            border-left: none;
+            border-radius: 0 10px 10px 0;
+            background: transparent;
+        }
+        .steam-wisp {
+            position: absolute;
+            bottom: 40px;
+            left: 15px;
+            width: 8px;
+            height: 8px;
+            background: rgba(220, 210, 200, 0.7);
+            border-radius: 50%;
+            filter: blur(4px);
+            animation: steamRise 4s ease-in-out infinite;
+        }
+        .steam-wisp:nth-child(2) {
+            left: 25px;
+            animation-delay: 1.3s;
+            animation-duration: 3.5s;
+            width: 6px;
+            height: 6px;
+        }
+        .steam-wisp:nth-child(3) {
+            left: 20px;
+            animation-delay: 2.7s;
+            animation-duration: 4.2s;
+            width: 7px;
+            height: 7px;
+        }
+        .steam-wisp:nth-child(4) {
+            left: 30px;
+            animation-delay: 0.5s;
+            animation-duration: 3.8s;
+            width: 5px;
+            height: 5px;
+        }
+
+        @keyframes steamRise {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 0.7;
+            }
+            25% {
+                transform: translateY(-20px) translateX(6px) scale(2.5);
+                opacity: 0.5;
+            }
+            50% {
+                transform: translateY(-38px) translateX(-4px) scale(3.5);
+                opacity: 0.25;
+            }
+            75% {
+                transform: translateY(-52px) translateX(3px) scale(4);
+                opacity: 0.08;
+            }
+            100% {
+                transform: translateY(-65px) translateX(-6px) scale(5);
+                opacity: 0;
+            }
+        }
+
+        /* ── Main Content Wrapper ── */
+        .main-wrapper {
+            position: relative;
+            z-index: 5;
+            max-width: 720px;
+            margin: 0 auto;
+            padding: 30px 24px 60px;
+        }
+
+        /* ── Header Section ── */
+        .header-section {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .portrait-frame {
+            display: inline-block;
+            position: relative;
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--soft-pink-light), var(--soft-lavender-light), var(--pastel-green-light));
+            box-shadow:
+                0 0 0 6px var(--cream),
+                0 0 0 10px var(--brown-light),
+                0 0 0 16px var(--cream),
+                0 8px 30px rgba(80, 50, 30, 0.2);
+            margin-bottom: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .portrait-inner {
+            text-align: center;
+            padding: 20px;
+        }
+        .portrait-ears {
+            font-size: 40px;
+            letter-spacing: 14px;
+            display: block;
+        }
+        .portrait-face {
+            font-size: 60px;
+            display: block;
+            margin-top: -5px;
+        }
+        .portrait-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--brown);
+            display: block;
+            margin-top: 4px;
+            font-family: 'Georgia', serif;
+        }
+
+        .quote-block {
+            margin: 20px 0 16px;
+            padding: 16px 24px;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            display: inline-block;
+            box-shadow: var(--shadow-soft);
+            position: relative;
+        }
+        .quote-block::before {
+            content: '"';
+            position: absolute;
+            top: -18px;
+            left: 16px;
+            font-size: 48px;
+            color: var(--soft-pink);
+            font-family: Georgia, serif;
+            opacity: 0.7;
+        }
+        .quote-block blockquote {
+            font-size: 1.3rem;
+            font-style: italic;
+            color: var(--text-dark);
+            margin: 0;
+            letter-spacing: 0.5px;
+        }
+        .quote-block blockquote .emoji-face {
+            font-style: normal;
+            font-size: 1.1em;
+        }
+
+        .title-badge {
+            display: inline-block;
+            padding: 10px 28px;
+            background: linear-gradient(135deg, var(--brown), var(--brown-dark));
+            color: #fdf6f0;
+            border-radius: 30px;
+            font-size: 0.9rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: bold;
+            box-shadow: 0 4px 16px rgba(100, 60, 30, 0.3);
+            position: relative;
+        }
+        .title-badge::after {
+            content: '✦';
+            position: absolute;
+            right: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--soft-pink);
+            font-size: 14px;
+            animation: sparklePulse 1.8s ease-in-out infinite;
+        }
+        .title-badge::before {
+            content: '✦';
+            position: absolute;
+            left: -14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--soft-pink);
+            font-size: 10px;
+            animation: sparklePulse 1.8s ease-in-out 0.9s infinite;
+        }
+
+        @keyframes sparklePulse {
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: translateY(-50%) scale(0.7);
+            }
+            50% {
+                opacity: 1;
+                transform: translateY(-50%) scale(1.3);
+            }
+        }
+
+        /* ── Body Content Cards ── */
+        .content-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 28px 26px;
+            margin-bottom: 22px;
+            box-shadow: var(--shadow-card);
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+        }
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 14px 38px rgba(80, 50, 30, 0.14);
+        }
+        .content-card h3 {
+            font-size: 1.15rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--brown);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: bold;
+        }
+        .content-card h3 .icon-dot {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .content-card p,
+        .content-card .card-text {
+            color: var(--text-medium);
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .content-card em {
+            color: var(--brown-dark);
+            font-style: italic;
+        }
+
+        .icon-dot.pink {
+            background: var(--soft-pink);
+        }
+        .icon-dot.lavender {
+            background: var(--soft-lavender);
+        }
+        .icon-dot.green {
+            background: var(--pastel-green);
+        }
+        .icon-dot.brown-dot {
+            background: var(--brown);
+        }
+
+        /* ── Origin Story Two Canons ── */
+        .canon-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 14px;
+        }
+        @media (max-width: 600px) {
+            .canon-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .canon-mini-card {
+            background: rgba(255, 248, 242, 0.7);
+            border: 1px dashed var(--card-border);
+            border-radius: 16px;
+            padding: 18px 16px;
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            line-height: 1.7;
+            position: relative;
+        }
+        .canon-mini-card .canon-label {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--brown);
+            font-weight: bold;
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        /* ── Seven-Chambered Revolver SVG ── */
+        .revolver-display {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .revolver-svg {
+            flex-shrink: 0;
+            animation: revolverSlowRotate 20s linear infinite;
+        }
+        @keyframes revolverSlowRotate {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        .revolver-caption {
+            font-size: 0.9rem;
+            color: var(--text-medium);
+            font-style: italic;
+        }
+
+        /* ── Relationships List ── */
+        .relationships-list {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .relationships-list li {
+            padding: 10px 16px;
+            background: rgba(255, 248, 242, 0.6);
+            border-radius: 12px;
+            border-left: 3px solid var(--soft-lavender);
+            font-size: 0.95rem;
+            color: var(--text-medium);
+            transition: background 0.3s;
+        }
+        .relationships-list li:hover {
+            background: rgba(255, 242, 235, 0.85);
+        }
+        .relationships-list li strong {
+            color: var(--brown-dark);
+        }
+
+        /* ── Favourite Concepts ── */
+        .concept-tags {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 6px;
+        }
+        .concept-tag {
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            font-weight: bold;
+            border: 2px solid;
+            transition: all 0.3s;
+            cursor: default;
+        }
+        .concept-tag.liminal {
+            background: #fdf5e6;
+            border-color: #e0c88e;
+            color: #8b6914;
+        }
+        .concept-tag.backrooms {
+            background: #fdf5e6;
+            border-color: #d4b896;
+            color: #7a5c3a;
+        }
+        .concept-tag:hover {
+            transform: scale(1.04);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+        }
+
+        /* ── Flower Field Bottom ── */
+        .flower-field {
+            text-align: center;
+            padding: 30px 0 10px;
+            font-size: 28px;
+            letter-spacing: 6px;
+            opacity: 0.8;
+            animation: fieldSway 4s ease-in-out infinite;
+            pointer-events: none;
+            user-select: none;
+        }
+        @keyframes fieldSway {
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+            25% {
+                transform: translateX(-6px);
+            }
+            75% {
+                transform: translateX(6px);
+            }
+        }
+
+        /* ── Footer ── */
+        .soft-footer {
+            text-align: center;
+            padding: 20px;
+            font-size: 0.8rem;
+            color: var(--brown-light);
+            letter-spacing: 2px;
+            opacity: 0.7;
+        }
+
+        /* ── Backrooms Wallpaper subtle pattern on cards ── */
+        .content-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 22px;
+            pointer-events: none;
+            opacity: 0.025;
+            background-image: repeating-linear-gradient(0deg,
+                    transparent,
+                    transparent 8px,
+                    #c9a870 8px,
+                    #c9a870 9px),
+                repeating-linear-gradient(90deg,
+                    transparent,
+                    transparent 20px,
+                    #c9a870 20px,
+                    #c9a870 21px);
+            z-index: -1;
+        }
+
+        /* ── Scrollbar ── */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #fdf3ee;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--brown-light);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Wind Streaks -->
+    <div class="wind-container" aria-hidden="true">
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+        <div class="wind-streak"></div>
+    </div>
+
+    <!-- Floating Petals Container -->
+    <div class="petals-container" id="petalsContainer" aria-hidden="true"></div>
+
+    <!-- Tea Cup & Steam -->
+    <div class="tea-steam-container" aria-hidden="true">
+        <div class="steam-wisp"></div>
+        <div class="steam-wisp"></div>
+        <div class="steam-wisp"></div>
+        <div class="steam-wisp"></div>
+        <div class="tea-cup"></div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-wrapper">
+
+        <!-- Header Section -->
+        <header class="header-section">
+            <!-- Raqeem's Portrait -->
+            <div class="portrait-frame">
+                <div class="portrait-inner">
+                    <span class="portrait-ears">🐾</span>
+                    <span class="portrait-face">🐕</span>
+                    <span class="portrait-label">Raqeem</span>
+                </div>
+            </div>
+
+            <!-- Quote -->
+            <div class="quote-block">
+                <blockquote>"CHEEMS <span class="emoji-face">^_^</span>"</blockquote>
+            </div>
+
+            <!-- Title -->
+            <div>
+                <span class="title-badge">Physical Guardian</span>
+            </div>
+        </header>
+
+        <!-- Body Section: Origin -->
+        <article class="content-card" id="origin">
+            <h3><span class="icon-dot pink"></span> Origin</h3>
+            <p>
+                OH MY GOSH, HAII!! I'm <strong>Raqeem</strong>, nice to meet you, dear readers!
+                So you want to know my origin, right? In real life, I was created when
+                <em>Riedho</em> wants to create his first fursona. Riedho can't decide whether
+                he wants a wolf or a husky fursona, so he created them both! You know who is
+                the wolf, right? Correct! It is <strong>Sirius</strong>!
+            </p>
+            <p style="margin-top:10px;">
+                As for my lore, I think it's pretty dark... I have <em>two canons</em>, both
+                are true at the same time!
+            </p>
+            <div class="canon-grid">
+                <div class="canon-mini-card">
+                    <span class="canon-label">📖 Canon 1</span>
+                    I was born in an animal adoption shelter. I was once adopted by a human. He
+                    was harsh and rude! So I ran away from home and became a stray dog. Life on
+                    the street was difficult! After a few years, <em>Riedho found me</em>. He
+                    offered me to become his pet. I agreed! He gave me <strong>safety</strong>
+                    and <strong>family</strong>!
+                </div>
+                <div class="canon-mini-card">
+                    <span class="canon-label">📖 Canon 2</span>
+                    I was born in the Middle East. My country was at war with the West. I
+                    immigrated to a peaceful country in the South West. Both of my parents died
+                    during the immigration. I became a street child. Life on the street was
+                    difficult! After a few years, <em>Riedho found me</em> and offered me an
+                    adoption. I agreed! Now I have a dad! My dad gave me
+                    <strong>safety</strong> and <strong>family</strong>!
+                </div>
+            </div>
+        </article>
+
+        <!-- Core Wound -->
+        <article class="content-card" id="core-wound">
+            <h3><span class="icon-dot lavender"></span> Core Wound</h3>
+            <p>
+                <strong>Abandonment.</strong> I wish I could forget the days I lived on the streets.
+            </p>
+        </article>
+
+        <!-- Values -->
+        <article class="content-card" id="values">
+            <h3><span class="icon-dot green"></span> Values</h3>
+            <p>
+                <strong>Comfort.</strong> <strong>Safety.</strong>
+            </p>
+        </article>
+
+        <!-- Symbols -->
+        <article class="content-card" id="symbols">
+            <h3><span class="icon-dot brown-dot"></span> Symbols</h3>
+            <p>I have a <em>seven-chambered revolver</em> which I use to protect Riedho.</p>
+            <div class="revolver-display">
+                <svg class="revolver-svg" width="80" height="80" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Outer ring -->
+                    <circle cx="50" cy="50" r="42" fill="none" stroke="#8b6b4a" stroke-width="3" opacity="0.7"/>
+                    <circle cx="50" cy="50" r="34" fill="none" stroke="#b8976e" stroke-width="1.5" opacity="0.5"/>
+                    <!-- 7 chambers arranged in a circle -->
+                    <circle cx="50" cy="18" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="73" cy="27" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="79" cy="50" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="67" cy="72" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="40" cy="77" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="21" cy="62" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <circle cx="23" cy="34" r="7" fill="#d4c5e2" stroke="#8b6b4a" stroke-width="1.5" opacity="0.8"/>
+                    <!-- Center pin -->
+                    <circle cx="50" cy="50" r="5" fill="#8b6b4a" opacity="0.9"/>
+                    <circle cx="50" cy="50" r="2.5" fill="#fdf6f0"/>
+                </svg>
+                <span class="revolver-caption">Seven chambers — one for each promise of protection.</span>
+            </div>
+        </article>
+
+        <!-- Relationships with Riedho -->
+        <article class="content-card" id="relationships-riedho">
+            <h3><span class="icon-dot pink"></span> Relationship with Riedho</h3>
+            <p>
+                Master Riedho gave me a job to be his <em>housemaid</em>! &gt;_&lt;. He's a
+                very good Master with me and others!
+            </p>
+        </article>
+
+        <!-- Relationships with other inner parts -->
+        <article class="content-card" id="relationships-others">
+            <h3><span class="icon-dot lavender"></span> Relationships with Other Inner Parts</h3>
+            <ul class="relationships-list">
+                <li>
+                    <strong>Sirius &amp; Draco</strong> — my older siblings. I am the middle child!
+                </li>
+                <li>
+                    <strong>Unnamed</strong> — my little brother!
+                </li>
+                <li>
+                    <strong>Norman</strong> — my friend. He bought me a bag of chips a while back!
+                </li>
+                <li>
+                    <strong>Master FALLEN</strong> — I also serve him.
+                </li>
+            </ul>
+        </article>
+
+        <!-- Favourite Concepts -->
+        <article class="content-card" id="favourites">
+            <h3><span class="icon-dot green"></span> Favourite Concepts</h3>
+            <div class="concept-tags">
+                <span class="concept-tag liminal">🌀 Liminality</span>
+                <span class="concept-tag backrooms">🟨 The Backrooms</span>
+            </div>
+            <p style="margin-top:12px; font-size:0.9rem; color: var(--text-medium);">
+                There's something beautiful about spaces that feel <em>between</em> — not quite
+                here, not quite there. A hallway at dusk. An empty field at dawn. The Backrooms
+                aren't just scary; they're <strong>liminal</strong>. And in liminality, I find a
+                strange kind of peace. 🌾
+            </p>
+        </article>
+
+        <!-- Flower Field -->
+        <div class="flower-field" aria-hidden="true">
+            🌸 🌼 🌷 💐 🌻 🌸 🌼 🌷 💐
+        </div>
+
+        <!-- Footer -->
+        <footer class="soft-footer">
+            ✦ a safe place within the in-between ✦
+        </footer>
+
+    </main>
+
+    <script>
+        (function() {
+            // ── Generate Floating Petals ──
+            const petalsContainer = document.getElementById('petalsContainer');
+            const petalColors = [
+                '#f2c4c9', '#fde8ec', '#d4c5e2', '#e8def2',
+                '#f5d5d9', '#e0c8d8', '#f9e0e4', '#dcc8e8'
+            ];
+
+            function createPetal() {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                petal.style.left = Math.random() * 100 + '%';
+                petal.style.top = (60 + Math.random() * 40) + '%';
+                petal.style.backgroundColor =
+                    petalColors[Math.floor(Math.random() * petalColors.length)];
+                petal.style.animationDuration = (8 + Math.random() * 14) + 's';
+                petal.style.animationDelay = Math.random() * 10 + 's';
+                petal.style.width = (8 + Math.random() * 14) + 'px';
+                petal.style.height = (10 + Math.random() * 18) + 'px';
+                petal.style.borderRadius =
+                    (40 + Math.random() * 50) + '% 0 ' + (40 + Math.random() * 50) +
+                    '% 0';
+                petalsContainer.appendChild(petal);
+
+                // Remove after animation completes
+                const duration = parseFloat(petal.style.animationDuration) + parseFloat(petal.style
+                    .animationDelay);
+                setTimeout(() => {
+                    if (petal.parentNode) {
+                        petal.parentNode.removeChild(petal);
+                    }
+                }, duration * 1000 + 500);
+            }
+
+            // Create initial petals
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createPetal(), i * 400);
+            }
+            // Keep creating new petals periodically
+            setInterval(() => {
+                if (petalsContainer.children.length < 25) {
+                    createPetal();
+                }
+            }, 2500);
+
+            // ── Subtle parallax on mouse move for content cards ──
+            const cards = document.querySelectorAll('.content-card');
+            document.addEventListener('mousemove', function(e) {
+                const x = e.clientX / window.innerWidth;
+                const y = e.clientY / window.innerHeight;
+
+                cards.forEach((card, index) => {
+                    const offsetX = (x - 0.5) * (6 + index * 2);
+                    const offsetY = (y - 0.5) * (6 + index * 2);
+                    card.style.transform =
+                        `translate(${offsetX}px, ${offsetY}px)`;
+                    card.style.transition = 'transform 0.4s ease-out';
+                });
+            });
+
+            // Reset card positions when mouse leaves
+            document.addEventListener('mouseleave', function() {
+                cards.forEach(card => {
+                    card.style.transform = 'translate(0, 0)';
+                    card.style.transition = 'transform 0.8s ease';
+                });
+            });
+
+            // ── Revolver click interaction ──
+            const revolverSvg = document.querySelector('.revolver-svg');
+            if (revolverSvg) {
+                revolverSvg.addEventListener('click', function() {
+                    this.style.animationDuration = '0.6s';
+                    setTimeout(() => {
+                        this.style.animationDuration = '20s';
+                    }, 600);
+                    // Brief sparkle
+                    const sparkle = document.createElement('span');
+                    sparkle.textContent = '✨';
+                    sparkle.style.cssText = `
+                            position: absolute;
+                            pointer-events: none;
+                            font-size: 20px;
+                            animation: sparklePop 0.8s ease-out forwards;
+                            z-index: 20;
+                        `;
+                    const rect = this.getBoundingClientRect();
+                    sparkle.style.left = rect.left + rect.width / 2 - 10 + 'px';
+                    sparkle.style.top = rect.top + 'px';
+                    sparkle.style.position = 'fixed';
+                    document.body.appendChild(sparkle);
+                    setTimeout(() => sparkle.remove(), 800);
+                });
+                revolverSvg.style.cursor = 'pointer';
+                revolverSvg.title = 'Click to spin the chambers!';
+            }
+
+            // Add sparkle pop keyframe dynamically
+            const styleSheet = document.createElement('style');
+            styleSheet.textContent = `
+                    @keyframes sparklePop {
+                        0% { opacity: 1; transform: translateY(0) scale(1); }
+                        100% { opacity: 0; transform: translateY(-40px) scale(1.8); }
+                    }
+                `;
+            document.head.appendChild(styleSheet);
+
+            console.log('🐾 Raqeem says: Welcome to my safe liminal space! CHEEMS ^_^');
+            console.log('🌾 The flower fields are blooming. The tea is warm. You are home.');
+        })();
+    </script>
+</body>
+</html>

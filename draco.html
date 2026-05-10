@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Draco — Engineer</title>
+    <style>
+        :root {
+            --bg-deep: #120404;
+            --bg-primary: #1a0505;
+            --bg-secondary: #2d0a0a;
+            --bg-card: #1f0808;
+            --copper: #b87333;
+            --copper-light: #d4894a;
+            --copper-bright: #e8985a;
+            --copper-dark: #8b4a1d;
+            --copper-deep: #5c2d0e;
+            --amber: #e07800;
+            --amber-glow: #ffa333;
+            --amber-soft: #ffb866;
+            --text: #e8d5c0;
+            --text-bright: #f5e8d8;
+            --text-muted: #b8957a;
+            --text-dim: #8a6d5a;
+            --accent: #c47a3d;
+            --accent-glow: rgba(228, 137, 74, 0.5);
+            --card-border: rgba(184, 115, 51, 0.3);
+            --card-border-hover: rgba(184, 115, 51, 0.6);
+            --shadow-copper: 0 0 30px rgba(180, 100, 40, 0.25);
+            --shadow-amber: 0 0 20px rgba(224, 120, 0, 0.3);
+            --font-heading: 'Georgia', 'Times New Roman', serif;
+            --font-body: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+            --font-mono: 'SF Mono', 'Cascadia Code', 'Consolas', 'Monaco', monospace;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            font-size: 16px;
+        }
+
+        body {
+            background: var(--bg-deep);
+            color: var(--text);
+            font-family: var(--font-body);
+            line-height: 1.7;
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* ── Schematic Grid Overlay ── */
+        .schematic-grid {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.5;
+            background-image:
+                linear-gradient(rgba(184, 115, 51, 0.04) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(184, 115, 51, 0.04) 1px, transparent 1px);
+            background-size: 28px 28px;
+            mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
+            -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 70%);
+        }
+
+        /* ── Schematic Accent Lines ── */
+        .schematic-accents {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+        .schematic-accents::before {
+            content: '';
+            position: absolute;
+            top: 8%;
+            left: 5%;
+            width: 120px;
+            height: 120px;
+            border: 1px solid rgba(184, 115, 51, 0.3);
+            border-radius: 50%;
+            border-style: dashed;
+            border-width: 1px;
+        }
+        .schematic-accents::after {
+            content: '';
+            position: absolute;
+            bottom: 15%;
+            right: 8%;
+            width: 80px;
+            height: 80px;
+            border: 1px solid rgba(184, 115, 51, 0.25);
+            border-radius: 50%;
+            border-style: dashed;
+            border-width: 1px;
+        }
+
+        /* ── Code Fragments Canvas ── */
+        #codeCanvas {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            opacity: 0.55;
+        }
+
+        /* ── Gears Container ── */
+        .gears-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .gear {
+            position: absolute;
+            opacity: 0.14;
+            transition: opacity 0.8s ease;
+        }
+        .gear svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            color: var(--copper);
+        }
+        .gear.clockwise {
+            animation: rotateCW 35s linear infinite;
+        }
+        .gear.counterclockwise {
+            animation: rotateCCW 28s linear infinite;
+        }
+        .gear.slow {
+            animation-duration: 55s;
+        }
+        .gear.medium {
+            animation-duration: 22s;
+        }
+        .gear.fast {
+            animation-duration: 14s;
+        }
+        .gear.amber-tint svg {
+            color: var(--amber);
+            opacity: 0.7;
+        }
+        .gear-1 {
+            top: 6%;
+            right: 8%;
+            width: 180px;
+            height: 180px;
+        }
+        .gear-2 {
+            bottom: 12%;
+            left: 5%;
+            width: 140px;
+            height: 140px;
+        }
+        .gear-3 {
+            top: 45%;
+            right: 4%;
+            width: 100px;
+            height: 100px;
+        }
+        .gear-4 {
+            top: 20%;
+            left: 3%;
+            width: 90px;
+            height: 90px;
+        }
+        .gear-5 {
+            bottom: 30%;
+            right: 15%;
+            width: 110px;
+            height: 110px;
+        }
+        .gear-6 {
+            top: 65%;
+            left: 12%;
+            width: 70px;
+            height: 70px;
+        }
+
+        @keyframes rotateCW {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+        @keyframes rotateCCW {
+            from {
+                transform: rotate(360deg);
+            }
+            to {
+                transform: rotate(0deg);
+            }
+        }
+
+        /* ── Main Content ── */
+        .main-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 750px;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        /* ── Header ── */
+        .header-section {
+            text-align: center;
+            padding: 2.5rem 1rem 2rem;
+            position: relative;
+        }
+
+        /* ── Portrait Frame ── */
+        .portrait-frame {
+            display: inline-block;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle at 50% 45%, #3a1510 0%, #1a0505 70%);
+            border: 4px solid var(--copper);
+            box-shadow:
+                0 0 0 8px var(--bg-deep),
+                0 0 0 12px var(--copper-dark),
+                0 0 40px rgba(180, 100, 40, 0.4),
+                inset 0 0 30px rgba(180, 100, 40, 0.15);
+            margin-bottom: 1.8rem;
+            overflow: hidden;
+            animation: portraitGlow 4s ease-in-out infinite;
+        }
+        .portrait-frame svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+            z-index: 2;
+        }
+        /* Gear teeth around portrait */
+        .portrait-frame::before {
+            content: '';
+            position: absolute;
+            inset: -16px;
+            border-radius: 50%;
+            border: 6px dashed var(--copper-dark);
+            opacity: 0.5;
+            animation: rotateCW 40s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .portrait-frame::after {
+            content: '';
+            position: absolute;
+            inset: -24px;
+            border-radius: 50%;
+            border: 3px dotted var(--copper);
+            opacity: 0.3;
+            animation: rotateCCW 50s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes portraitGlow {
+            0%,
+            100% {
+                box-shadow: 0 0 0 8px var(--bg-deep), 0 0 0 12px var(--copper-dark), 0 0 40px rgba(180, 100, 40, 0.4), inset 0 0 30px rgba(180, 100, 40, 0.15);
+            }
+            50% {
+                box-shadow: 0 0 0 8px var(--bg-deep), 0 0 0 12px var(--copper-dark), 0 0 55px rgba(220, 140, 60, 0.55), inset 0 0 40px rgba(200, 120, 50, 0.25);
+            }
+        }
+
+        /* ── Quote ── */
+        .quote-block {
+            margin: 1.2rem auto 1.5rem;
+            padding: 1.2rem 2rem;
+            position: relative;
+            font-family: var(--font-heading);
+            font-style: italic;
+            font-size: 1.25rem;
+            color: var(--text-bright);
+            line-height: 1.5;
+            letter-spacing: 0.02em;
+            max-width: 550px;
+            background: rgba(45, 10, 10, 0.5);
+            border-left: 3px solid var(--copper);
+            border-right: 3px solid var(--copper);
+            border-radius: 4px;
+            box-shadow: var(--shadow-copper);
+        }
+        .quote-block::before {
+            content: '\201C';
+            position: absolute;
+            top: -18px;
+            left: 16px;
+            font-size: 3.5rem;
+            color: var(--copper-light);
+            font-family: var(--font-heading);
+            line-height: 1;
+            opacity: 0.7;
+        }
+        .quote-block::after {
+            content: '\201D';
+            position: absolute;
+            bottom: -32px;
+            right: 16px;
+            font-size: 3.5rem;
+            color: var(--copper-light);
+            font-family: var(--font-heading);
+            line-height: 1;
+            opacity: 0.7;
+        }
+        .quote-block p {
+            margin: 0;
+        }
+
+        /* ── Title Badge ── */
+        .title-badge {
+            display: inline-block;
+            font-family: var(--font-mono);
+            font-size: 0.95rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            color: var(--amber-soft);
+            background: rgba(30, 8, 8, 0.8);
+            border: 2px solid var(--copper);
+            padding: 0.5rem 1.8rem;
+            border-radius: 3px;
+            position: relative;
+            box-shadow: var(--shadow-amber);
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        .title-badge::before,
+        .title-badge::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 8px;
+            height: 8px;
+            background: var(--copper-bright);
+            border-radius: 50%;
+            transform: translateY(-50%);
+            box-shadow: 0 0 8px var(--amber-glow);
+        }
+        .title-badge::before {
+            left: 10px;
+        }
+        .title-badge::after {
+            right: 10px;
+        }
+
+        @keyframes badgePulse {
+            0%,
+            100% {
+                box-shadow: 0 0 20px rgba(224, 120, 0, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 35px rgba(255, 163, 51, 0.5);
+            }
+        }
+
+        /* ── Decorated Divider ── */
+        .divider {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin: 2rem 0;
+            opacity: 0.6;
+        }
+        .divider .line {
+            height: 2px;
+            flex: 1;
+            max-width: 80px;
+            background: linear-gradient(90deg, transparent, var(--copper), transparent);
+        }
+        .divider .dot {
+            width: 6px;
+            height: 6px;
+            background: var(--copper-light);
+            border-radius: 50%;
+            box-shadow: 0 0 6px var(--amber-glow);
+            animation: dotBlink 2s ease-in-out infinite;
+        }
+        .divider .dot:nth-child(2) {
+            animation-delay: 0.3s;
+        }
+        .divider .dot:nth-child(3) {
+            animation-delay: 0.6s;
+        }
+
+        @keyframes dotBlink {
+            0%,
+            100% {
+                opacity: 1;
+                box-shadow: 0 0 6px var(--amber-glow);
+            }
+            50% {
+                opacity: 0.35;
+                box-shadow: 0 0 2px var(--amber-glow);
+            }
+        }
+
+        /* ── Section Cards ── */
+        .section-card {
+            background: var(--bg-card);
+            border: 1px solid var(--card-border);
+            border-radius: 6px;
+            padding: 1.6rem 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            transition: all 0.35s ease;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+        }
+        .section-card:hover {
+            border-color: var(--card-border-hover);
+            box-shadow: 0 4px 24px rgba(180, 100, 40, 0.2), 0 2px 12px rgba(0, 0, 0, 0.3);
+            transform: translateY(-1px);
+        }
+        .section-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.35rem;
+            color: var(--copper-bright);
+            margin-bottom: 0.8rem;
+            letter-spacing: 0.03em;
+            position: relative;
+            display: inline-block;
+        }
+        .section-card h2::after {
+            content: '';
+            position: absolute;
+            bottom: -3px;
+            left: 0;
+            width: 40%;
+            height: 2px;
+            background: linear-gradient(90deg, var(--copper), transparent);
+            border-radius: 1px;
+        }
+        .section-card p {
+            color: var(--text);
+            font-size: 1rem;
+            line-height: 1.75;
+        }
+        .section-card .highlight {
+            color: var(--amber-soft);
+            font-weight: 500;
+        }
+
+        /* Accent corner for cards */
+        .section-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 28px;
+            height: 28px;
+            border-top: 2px solid var(--copper-light);
+            border-right: 2px solid var(--copper-light);
+            border-radius: 0 6px 0 4px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        /* ── Origin special styling ── */
+        .section-card.origin-card {
+            border-left: 3px solid var(--copper);
+        }
+
+        /* ── Small gear icon next to headings ── */
+        .heading-gear {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            margin-right: 8px;
+            vertical-align: middle;
+            animation: rotateCW 12s linear infinite;
+            color: var(--copper-light);
+        }
+        .heading-gear svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* ── Footer ── */
+        .footer-note {
+            text-align: center;
+            margin-top: 2.5rem;
+            padding: 1.5rem;
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            font-family: var(--font-mono);
+            letter-spacing: 0.05em;
+            border-top: 1px solid rgba(184, 115, 51, 0.2);
+        }
+        .footer-note span {
+            color: var(--copper-light);
+        }
+
+        /* ── Code fragment accent lines ── */
+        .code-accent {
+            position: absolute;
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: rgba(200, 150, 100, 0.4);
+            pointer-events: none;
+            white-space: nowrap;
+            user-select: none;
+            z-index: 0;
+            animation: floatCode 8s ease-in-out infinite;
+        }
+        .code-accent:nth-child(1) {
+            top: 8%;
+            right: 12%;
+            animation-delay: 0s;
+        }
+        .code-accent:nth-child(2) {
+            top: 55%;
+            left: 6%;
+            animation-delay: 2.5s;
+        }
+        .code-accent:nth-child(3) {
+            top: 75%;
+            right: 20%;
+            animation-delay: 5s;
+        }
+        .code-accent:nth-child(4) {
+            top: 30%;
+            left: 10%;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes floatCode {
+            0%,
+            100% {
+                opacity: 0.25;
+                transform: translateY(0);
+            }
+            50% {
+                opacity: 0.55;
+                transform: translateY(-8px);
+            }
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .main-wrapper {
+                padding: 1rem 1rem 3rem;
+                max-width: 100%;
+            }
+            .portrait-frame {
+                width: 130px;
+                height: 130px;
+                border-width: 3px;
+                box-shadow: 0 0 0 5px var(--bg-deep), 0 0 0 8px var(--copper-dark), 0 0 25px rgba(180, 100, 40, 0.35), inset 0 0 20px rgba(180, 100, 40, 0.12);
+            }
+            .portrait-frame::before {
+                inset: -12px;
+                border-width: 4px;
+            }
+            .portrait-frame::after {
+                inset: -18px;
+                border-width: 2px;
+            }
+            .quote-block {
+                font-size: 1.05rem;
+                padding: 1rem 1.2rem;
+                margin: 1rem 0.5rem;
+            }
+            .quote-block::before {
+                font-size: 2.5rem;
+                top: -12px;
+                left: 8px;
+            }
+            .quote-block::after {
+                font-size: 2.5rem;
+                bottom: -24px;
+                right: 8px;
+            }
+            .section-card {
+                padding: 1.2rem 1rem;
+                margin-bottom: 1rem;
+            }
+            .section-card h2 {
+                font-size: 1.15rem;
+            }
+            .gear-1 {
+                width: 100px;
+                height: 100px;
+                top: 4%;
+                right: 2%;
+            }
+            .gear-2 {
+                width: 80px;
+                height: 80px;
+                bottom: 8%;
+                left: 1%;
+            }
+            .gear-3 {
+                width: 55px;
+                height: 55px;
+                right: 1%;
+            }
+            .gear-4 {
+                width: 50px;
+                height: 50px;
+                left: 1%;
+            }
+            .gear-5 {
+                width: 60px;
+                height: 60px;
+                right: 8%;
+            }
+            .gear-6 {
+                width: 40px;
+                height: 40px;
+                left: 6%;
+            }
+            .title-badge {
+                font-size: 0.8rem;
+                padding: 0.4rem 1.2rem;
+            }
+            .code-accent {
+                font-size: 0.6rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .portrait-frame {
+                width: 100px;
+                height: 100px;
+                border-width: 2px;
+            }
+            .portrait-frame::before {
+                inset: -8px;
+                border-width: 3px;
+            }
+            .portrait-frame::after {
+                inset: -13px;
+                border-width: 1.5px;
+            }
+            .quote-block {
+                font-size: 0.9rem;
+                padding: 0.8rem 1rem;
+                border-left-width: 2px;
+                border-right-width: 2px;
+            }
+            .section-card {
+                padding: 1rem 0.8rem;
+            }
+            .gears-layer .gear {
+                opacity: 0.07;
+            }
+            .gear-1 {
+                width: 60px;
+                height: 60px;
+            }
+            .gear-2 {
+                width: 50px;
+                height: 50px;
+            }
+            .gear-3,
+            .gear-4,
+            .gear-5,
+            .gear-6 {
+                width: 35px;
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Schematic Grid -->
+    <div class="schematic-grid" aria-hidden="true"></div>
+    <div class="schematic-accents" aria-hidden="true"></div>
+
+    <!-- Floating Code Fragments Canvas -->
+    <canvas id="codeCanvas" aria-hidden="true"></canvas>
+
+    <!-- Decorative Gears -->
+    <div class="gears-layer" aria-hidden="true">
+        <div class="gear gear-1 clockwise slow">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="38" stroke="currentColor" stroke-width="10" stroke-dasharray="9 7" fill="none" opacity="0.7"/>
+                <circle cx="50" cy="50" r="34" fill="currentColor" opacity="0.5"/>
+                <circle cx="50" cy="50" r="16" fill="var(--bg-deep)" stroke="currentColor" stroke-width="3" opacity="0.7"/>
+                <circle cx="50" cy="50" r="12" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.4"/>
+                <line x1="50" y1="16" x2="50" y2="34" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+                <line x1="50" y1="66" x2="50" y2="84" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+                <line x1="16" y1="50" x2="34" y2="50" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+                <line x1="66" y1="50" x2="84" y2="50" stroke="currentColor" stroke-width="3" opacity="0.5"/>
+            </svg>
+        </div>
+        <div class="gear gear-2 counterclockwise medium">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="36" stroke="currentColor" stroke-width="11" stroke-dasharray="11 8" fill="none" opacity="0.65"/>
+                <circle cx="50" cy="50" r="32" fill="currentColor" opacity="0.45"/>
+                <circle cx="50" cy="50" r="18" fill="var(--bg-deep)" stroke="currentColor" stroke-width="2.5" opacity="0.6"/>
+                <circle cx="50" cy="50" r="8" fill="currentColor" opacity="0.35"/>
+            </svg>
+        </div>
+        <div class="gear gear-3 clockwise fast amber-tint">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="30" stroke="currentColor" stroke-width="8" stroke-dasharray="7 5" fill="none" opacity="0.7"/>
+                <circle cx="50" cy="50" r="27" fill="currentColor" opacity="0.5"/>
+                <circle cx="50" cy="50" r="10" fill="var(--bg-deep)" stroke="currentColor" stroke-width="2" opacity="0.6"/>
+            </svg>
+        </div>
+        <div class="gear gear-4 counterclockwise medium">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="32" stroke="currentColor" stroke-width="9" stroke-dasharray="8 6" fill="none" opacity="0.6"/>
+                <circle cx="50" cy="50" r="29" fill="currentColor" opacity="0.4"/>
+                <circle cx="50" cy="50" r="12" fill="var(--bg-deep)" stroke="currentColor" stroke-width="2" opacity="0.5"/>
+            </svg>
+        </div>
+        <div class="gear gear-5 clockwise slow amber-tint">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="34" stroke="currentColor" stroke-width="10" stroke-dasharray="10 7" fill="none" opacity="0.55"/>
+                <circle cx="50" cy="50" r="30" fill="currentColor" opacity="0.4"/>
+                <circle cx="50" cy="50" r="14" fill="var(--bg-deep)" stroke="currentColor" stroke-width="2.5" opacity="0.55"/>
+                <circle cx="50" cy="50" r="5" fill="currentColor" opacity="0.3"/>
+            </svg>
+        </div>
+        <div class="gear gear-6 counterclockwise fast">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="25" stroke="currentColor" stroke-width="7" stroke-dasharray="6 4.5" fill="none" opacity="0.7"/>
+                <circle cx="50" cy="50" r="22" fill="currentColor" opacity="0.5"/>
+                <circle cx="50" cy="50" r="7" fill="var(--bg-deep)" stroke="currentColor" stroke-width="1.5" opacity="0.6"/>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Floating Code Accents (CSS) -->
+    <span class="code-accent" aria-hidden="true">const draco = new Dragon();</span>
+    <span class="code-accent" aria-hidden="true">while(alive) { build(); }</span>
+    <span class="code-accent" aria-hidden="true">await humans.accept();</span>
+    <span class="code-accent" aria-hidden="true">bridge.construct(hope);</span>
+
+    <!-- ─── Main Content ─── -->
+    <div class="main-wrapper">
+
+        <!-- Header Section -->
+        <header class="header-section">
+            <!-- Portrait -->
+            <div class="portrait-frame" title="Draco's Portrait">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Background glow -->
+                    <defs>
+                        <radialGradient id="faceGlow" cx="50%" cy="45%" r="50%">
+                            <stop offset="0%" stop-color="#d4894a" stop-opacity="0.3"/>
+                            <stop offset="100%" stop-color="#1a0505" stop-opacity="0"/>
+                        </radialGradient>
+                        <linearGradient id="copperGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#d4894a"/>
+                            <stop offset="50%" stop-color="#b87333"/>
+                            <stop offset="100%" stop-color="#8b4a1d"/>
+                        </linearGradient>
+                        <linearGradient id="hornGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                            <stop offset="0%" stop-color="#8b4a1d"/>
+                            <stop offset="100%" stop-color="#e8985a"/>
+                        </linearGradient>
+                    </defs>
+                    <circle cx="60" cy="58" r="48" fill="url(#faceGlow)"/>
+                    <!-- Head shape -->
+                    <ellipse cx="60" cy="65" rx="30" ry="28" fill="#3a1510" stroke="url(#copperGrad)" stroke-width="2.5"/>
+                    <!-- Snout -->
+                    <ellipse cx="60" cy="72" rx="18" ry="14" fill="#4a1f14" stroke="#b87333" stroke-width="1.8"/>
+                    <!-- Nostrils -->
+                    <circle cx="55" cy="71" r="2.5" fill="#1a0505" stroke="#8b4a1d" stroke-width="0.8"/>
+                    <circle cx="65" cy="71" r="2.5" fill="#1a0505" stroke="#8b4a1d" stroke-width="0.8"/>
+                    <!-- Eyes -->
+                    <ellipse cx="48" cy="56" rx="8" ry="7" fill="#1a0505" stroke="#d4894a" stroke-width="1.5"/>
+                    <ellipse cx="72" cy="56" rx="8" ry="7" fill="#1a0505" stroke="#d4894a" stroke-width="1.5"/>
+                    <ellipse cx="49" cy="55" rx="5" ry="4.5" fill="#e8985a"/>
+                    <ellipse cx="73" cy="55" rx="5" ry="4.5" fill="#e8985a"/>
+                    <circle cx="50" cy="54" r="2.5" fill="#ffb866"/>
+                    <circle cx="74" cy="54" r="2.5" fill="#ffb866"/>
+                    <circle cx="47.5" cy="55.5" r="1" fill="#fff" opacity="0.7"/>
+                    <circle cx="71.5" cy="55.5" r="1" fill="#fff" opacity="0.7"/>
+                    <!-- Brow ridges -->
+                    <path d="M38 50 Q48 43 58 48" fill="none" stroke="#8b4a1d" stroke-width="2.5" stroke-linecap="round"/>
+                    <path d="M62 48 Q72 43 82 50" fill="none" stroke="#8b4a1d" stroke-width="2.5" stroke-linecap="round"/>
+                    <!-- Horns -->
+                    <path d="M38 40 L28 18 L35 35" fill="url(#hornGrad)" stroke="#b87333" stroke-width="1.5" stroke-linejoin="round"/>
+                    <path d="M82 40 L92 18 L85 35" fill="url(#hornGrad)" stroke="#b87333" stroke-width="1.5" stroke-linejoin="round"/>
+                    <!-- Mouth - gentle smile -->
+                    <path d="M50 78 Q60 84 70 78" fill="none" stroke="#8b4a1d" stroke-width="1.5" stroke-linecap="round"/>
+                    <!-- Scale suggestions -->
+                    <circle cx="42" cy="48" r="1.5" fill="none" stroke="#b87333" stroke-width="0.5" opacity="0.5"/>
+                    <circle cx="78" cy="48" r="1.5" fill="none" stroke="#b87333" stroke-width="0.5" opacity="0.5"/>
+                    <circle cx="38" cy="58" r="1.2" fill="none" stroke="#b87333" stroke-width="0.5" opacity="0.4"/>
+                    <circle cx="82" cy="58" r="1.2" fill="none" stroke="#b87333" stroke-width="0.5" opacity="0.4"/>
+                </svg>
+            </div>
+
+            <!-- Quote -->
+            <div class="quote-block">
+                <p>Everything WILL be okay, you just have to live long enough to see it</p>
+            </div>
+
+            <!-- Title -->
+            <div class="title-badge">Engineer</div>
+        </header>
+
+        <!-- Divider -->
+        <div class="divider" aria-hidden="true">
+            <span class="line"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="line"></span>
+        </div>
+
+        <!-- Body Section -->
+        <main>
+            <!-- Origin -->
+            <article class="section-card origin-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Origin
+                </h2>
+                <p>Hello humans! I am <span class="highlight">Riedho's proudest engineer</span>! Oh right, you're here because you want to know my origin, right? Well, in reality, I was created not long after Riedho know about the furry fandom. But that's maybe not what you're here for, you're here for my lore!</p>
+                <p>So, I was born in a cave (typical for dragons). I was raised by my mom and dad. But they teach me that <span class="highlight">Dragons must dominate and destroy!</span> Because it's how you become "A proper dragon", they said. <span class="highlight">I DISAGREE WITH THEM!</span></p>
+                <p>I decided to flew away from my parent's cave into another cave! I pick a cave that's near human village, because I was curious about them. They say that humans are weak, but I don't believe them! Then I was shocked! <span class="highlight">Humans are actually very awesome and great!</span> They can build bridges that last for millenia! They can turn infertile land into fertile farms! Well, although they're physically frail, but at least they are persistent, tenacious, and industrious!</p>
+                <p><span class="highlight">I FELL IN LOVE WITH HUMANS!</span> But there's a problem. I CAN'T LIVE WITH THEM! Everytime I get near them, they scream, <span class="highlight">"DRAGON!!!"</span>, and ran away in terror! But I didn't do anything! I was depressed after that day! I became so depressed, that I decided to end my own life!</p>
+                <p>I flew away to the sky, and just let myself freefalling. BUT! When I expected I would feel pain, I didn't! <span class="highlight">SOMEONE TELEPORTED ME MID-AIR!</span> And that someone turns out to be my Creator! He offered me to become his servant! I instantly accepted the offer! <span class="highlight">I WAS SO HAPPY THAT I CRIED!!!</span> But I was okay with that. BECAUSE NOW I CAN WORK ALONG WITH HUMANS!!! HOORAY!!!</p>
+            </article>
+
+            <!-- Core wound -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Core Wound
+                </h2>
+                <p>What's that? Oh what hurts me the most that it changed me? Hmm, let me think for a moment... I think it hurts me the most when <span class="highlight">the humans that I love so much didn't accept me</span> because of things that are outside of my control! Wait, what? I misunderstood? I'm sorry!</p>
+            </article>
+
+            <!-- Values -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Values
+                </h2>
+                <p>As an engineer, I value <span class="highlight">efficiency and reliability</span> of course!</p>
+            </article>
+
+            <!-- Symbols -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Symbols
+                </h2>
+                <p>Any item <span class="highlight">humans gave to me</span> are sacred in my eyes!</p>
+            </article>
+
+            <!-- Relationships with Riedho -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Relationships with Riedho
+                </h2>
+                <p>As I have told you, I am <span class="highlight">Riedho's engineer</span>! I solve practical problems on his behalf!</p>
+            </article>
+
+            <!-- Relationships with other inner parts -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Relationships with Other Inner Parts
+                </h2>
+                <p>I am the <span class="highlight">second-oldest</span>. Sirius is my older brother, Raqeem and Unnamed are my little brothers! Norman is my colloague, and <span class="highlight">FALLEN</span> is my second boss I think?</p>
+            </article>
+
+            <!-- Favourite Concepts -->
+            <article class="section-card">
+                <h2>
+                    <span class="heading-gear">
+                        <svg viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="2.5" stroke-dasharray="3 2.5" fill="none"/><circle cx="10" cy="10" r="5.5" fill="currentColor" opacity="0.5"/><circle cx="10" cy="10" r="2" fill="var(--bg-deep)"/></svg>
+                    </span>
+                    Favourite Concepts
+                </h2>
+                <p><span class="highlight">Science and Technology</span></p>
+            </article>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer-note">
+            <p>&#x2699; <span>Draco</span> &mdash; Engineer of the Sanctum &mdash; Built with copper, code &amp; compassion &#x2699;</p>
+        </footer>
+    </div>
+
+    <script>
+        (function() {
+            const canvas = document.getElementById('codeCanvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            let width, height;
+            const particles = [];
+            const maxParticles = 18;
+
+            const codeFragments = [
+                'fn engineer() {',
+                'const draco = new Dragon();',
+                'while(alive) { build(); }',
+                'await humans.accept();',
+                'bridge.construct(hope);',
+                'import { trust } from "heart";',
+                'gears.rotate(Infinity);',
+                '// TODO: fix everything',
+                'class Draco extends Dragon {',
+                'return new Dawn();',
+                'forge.copper.alloy(hope);',
+                'schematics.draw("future");',
+                'fn befriend(humans) -> bool',
+                'tolerance.compile()?',
+                'reliability >= 0.999;',
+                'const cave = new Home();',
+                'love.overflow = true;',
+                'yield* persistence;',
+                'async fn learn() -> Wisdom',
+                'blueprint.validate(dreams);',
+            ];
+
+            function resize() {
+                // Keep the canvas buffer exactly matching the viewport
+				width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+
+            function createParticle() {
+                return {
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    text: codeFragments[Math.floor(Math.random() * codeFragments.length)],
+                    fontSize: 10 + Math.random() * 7,
+                    opacity: 0.08 + Math.random() * 0.25,
+                    speed: 0.15 + Math.random() * 0.5,
+                    drift: (Math.random() - 0.5) * 0.3,
+                    life: 0,
+                    maxLife: 400 + Math.random() * 600,
+                };
+            }
+
+            function initParticles() {
+                particles.length = 0;
+                for (let i = 0; i < maxParticles; i++) {
+                    particles.push(createParticle());
+                }
+            }
+
+            function updateParticles() {
+                for (let i = particles.length - 1; i >= 0; i--) {
+                    const p = particles[i];
+                    p.y -= p.speed;
+                    p.x += p.drift;
+                    p.life++;
+					// Recycle particle when it leaves the top or expires
+                    if (p.life > p.maxLife || p.y < -20) {
+                        const fresh = createParticle();
+                        fresh.y = height + 15;               // re‑enter from bottom
+                        fresh.life = 0;
+                        particles[i] = fresh;
+                    }
+                }
+                while (particles.length < maxParticles) {
+                    const fresh = createParticle();
+                    fresh.y = Math.random() * height;
+                    particles.push(fresh);
+                }
+            }
+
+            function drawParticles() {
+                ctx.clearRect(0, 0, width, height);
+                for (const p of particles) {
+                    const lifeRatio = 1 - Math.abs((p.life / p.maxLife) * 2 - 1); // Fade in and out
+                    const alpha = p.opacity * lifeRatio;
+                    ctx.fillStyle = `rgba(200,155,110,${alpha})`;
+                    ctx.font = `${p.fontSize}px 'SF Mono', 'Cascadia Code', 'Consolas', 'Monaco', monospace`;
+                    ctx.fillText(p.text, p.x, p.y);
+                }
+            }
+
+            function animate() {
+                updateParticles();
+                drawParticles();
+                requestAnimationFrame(animate);
+            }
+
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                resize();
+                initParticles();   // re‑scatter particles immediately
+            });
+
+            // Initialize
+            resize();
+            initParticles();
+            animate();
+        })();
+    </script>
+</body>
+</html>
