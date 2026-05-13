@@ -98,46 +98,30 @@
 
         /* Portrait frame */
         .portrait-frame {
-            position: relative;
-            width: 160px;
-            height: 160px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: default;
-            user-select: none;
-        }
+			width: 160px;
+			height: 160px;
+  			border-radius: 50%;          /* circular like the enso */
+  			overflow: hidden;
+			background: transparent;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			}
 
-        .portrait-frame svg {
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
+		.portrait-img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;           /* crops to fill the circle nicely */
+			filter: grayscale(50%) contrast(1.05) brightness(0.98);
+			transition: filter 0.8s ease, transform 0.6s ease;
+			animation: calmBreath 12s ease-in-out infinite; /* keeps the gentle pulse */
+			}
 
-        .enso-circle {
-            fill: none;
-            stroke: var(--black);
-            stroke-width: 2.8;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            opacity: 0.85;
-            transition: stroke-opacity 0.8s ease, transform 0.6s ease;
-        }
-
-        .portrait-frame:hover .enso-circle {
-            stroke-opacity: 1;
-            transform: rotate(3deg) scale(1.02);
-        }
-
-        .portrait-dot {
-            fill: var(--black);
-            opacity: 0.55;
-            transition: opacity 0.8s ease;
-        }
-
-        .portrait-frame:hover .portrait-dot {
-            opacity: 0.8;
-        }
+		/* Subtle hover effect – slightly lift the grayscale */
+		.portrait-frame:hover .portrait-img {
+			filter: grayscale(5%) contrast(1.1) brightness(1);
+			transform: scale(1.03);
+		}
 
         /* Subtle pulse on the portrait — existential calm breathing */
         @keyframes calmBreath {
@@ -552,28 +536,14 @@
             <!-- ===== HEADER SECTION ===== -->
             <header class="header-section">
 
-                <!-- Sirius's Portrait — Enso-inspired circle -->
-                <div class="portrait-frame glitchable" data-glitch-group="portrait" aria-label="Sirius's portrait — an enso circle">
-                    <div class="portrait-inner">
-                        <svg viewBox="0 0 160 160" xmlns="http://www.w3.org/2000/svg">
-                            <!-- Outer enso circle — slightly irregular for a hand-drawn feel -->
-                            <ellipse
-                            class="enso-circle"
-                            cx="80" cy="80"
-                            rx="62" ry="63"
-                            transform="rotate(-8 80 80)"
-                            stroke-dasharray="385 400"
-                            stroke-dashoffset="8"
-                            />
-                            <!-- Small accent dot — the "breath" within the void -->
-                            <circle
-                            class="portrait-dot"
-                            cx="68" cy="72"
-                            r="3.5"
-                            />
-                        </svg>
-                    </div>
-                </div>
+                <!-- Sirius's Portrait — Used to be Enso-inspired circle -->
+                <div class="portrait-frame glitchable" data-glitch-group="portrait" aria-label="Sirius's portrait">
+  					<img
+    					src="images/syi'ra.jpeg"
+    					alt="Sirius"
+    					class="portrait-img"
+  					/>
+				</div>
 
                 <!-- Quote -->
                 <div class="quote-block" data-glitch-protect="true">
