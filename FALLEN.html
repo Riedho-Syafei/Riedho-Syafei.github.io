@@ -153,71 +153,19 @@
             pointer-events: none;
             z-index: 2;
         }
-        .portrait-silhouette {
-            width: 140px;
-            height: 200px;
-            position: relative;
-            z-index: 1;
-        }
-        .portrait-silhouette .figure {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(ellipse at center,
-                    rgba(30, 20, 18, 0.9) 30%,
-                    rgba(10, 5, 3, 0.95) 70%,
-                    #000 100%);
-            border-radius: 40% 40% 30% 30% / 35% 35% 25% 25%;
-            position: relative;
-            box-shadow:
-                0 0 50px var(--glow-orange),
-                0 0 100px rgba(224, 85, 31, 0.25);
-        }
-        .portrait-silhouette .megaphone-shape {
-            position: absolute;
-            top: 55px;
-            right: -35px;
-            width: 70px;
-            height: 45px;
-            background: var(--burning-orange);
-            clip-path: polygon(0% 15%, 100% 0%, 100% 100%, 0% 85%);
-            opacity: 0.85;
-            box-shadow: 0 0 30px var(--glow-orange);
-            z-index: 3;
-            animation: megaphoneGlow 2s ease-in-out infinite;
-        }
-        @keyframes megaphoneGlow {
-            0%,
-            100% {
-                box-shadow: 0 0 30px var(--glow-orange);
-            }
-            50% {
-                box-shadow: 0 0 60px var(--glow-orange), 0 0 90px rgba(255, 107, 43, 0.5);
-            }
-        }
-        .portrait-silhouette .flame {
-            position: absolute;
-            bottom: 10px;
-            left: 20px;
-            width: 18px;
-            height: 35px;
-            background: var(--burning-orange-bright);
-            border-radius: 50% 50% 20% 20%;
-            z-index: 3;
-            animation: flickerFlame 0.6s ease-in-out infinite alternate;
-            box-shadow: 0 0 25px var(--glow-orange), 0 0 50px rgba(255, 107, 43, 0.6);
-        }
-        @keyframes flickerFlame {
-            0% {
-                transform: scaleY(1) scaleX(1);
-                opacity: 0.9;
-                border-radius: 50% 50% 20% 20%;
-            }
-            100% {
-                transform: scaleY(1.25) scaleX(0.85);
-                opacity: 1;
-                border-radius: 45% 55% 30% 20%;
-            }
-        }
+
+		.portrait-img {
+    		width: 100%;
+    		height: 100%;
+    		object-fit: cover;
+    		object-position: center top;
+    		position: absolute;
+    		top: 0;
+    		left: 0;
+    		z-index: 1;
+    		/* Keeps the border and dashed lines visible over the image */
+		}
+
         /* Tape on portrait */
         .tape-strip {
             position: absolute;
@@ -677,11 +625,7 @@
                 <div class="tape-strip tl"></div>
                 <div class="tape-strip tr"></div>
                 <div class="tape-strip bl"></div>
-                <div class="portrait-silhouette">
-                    <div class="figure"></div>
-                    <div class="megaphone-shape"></div>
-                    <div class="flame"></div>
-                </div>
+                <img src="images/FALLEN.jpeg" alt="FALLEN portrait" class="portrait-img" />
             </div>
 
             <!-- Quote & Title -->
