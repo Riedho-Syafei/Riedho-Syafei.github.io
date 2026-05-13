@@ -368,58 +368,17 @@
             }
         }
 
-        .portrait-silhouette {
-            position: relative;
-            z-index: 1;
-            width: 70px;
-            height: 90px;
-            opacity: 0.55;
-        }
-
-        /* Simple maned wolf silhouette using CSS */
-        .portrait-silhouette::before {
-            content: '';
-            position: absolute;
-            top: 8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 44px;
-            height: 52px;
-            background: rgba(200, 170, 130, 0.5);
-            border-radius: 50% 50% 40% 40%;
-            /* head */
-        }
-
-        .portrait-silhouette::after {
-            content: '';
-            position: absolute;
-            top: 42px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 38px;
-            background: rgba(180, 150, 110, 0.4);
-            border-radius: 35% 35% 30% 30%;
-            /* body */
-        }
-
-        .portrait-ear-left,
-        .portrait-ear-right {
-            position: absolute;
-            width: 14px;
-            height: 32px;
-            background: rgba(180, 150, 115, 0.45);
-            border-radius: 40% 40% 20% 20%;
-            top: -8px;
-        }
-        .portrait-ear-left {
-            left: 16px;
-            transform: rotate(-8deg);
-        }
-        .portrait-ear-right {
-            right: 16px;
-            transform: rotate(8deg);
-        }
+		.portrait-image {
+    		position: relative;
+    		z-index: 1;
+    		width: 100%;
+    		height: 100%;
+    		object-fit: cover;
+    		border-radius: inherit; /* matches the frame's rounded shape */
+    		display: block;
+    		/* Optional: a subtle dark/warm overlay to blend with the room */
+    		filter: sepia(0.15) brightness(0.95) contrast(1.05);
+		}
 
         .portrait-name-plaque {
             position: absolute;
@@ -889,13 +848,12 @@
                 <!-- Portrait -->
                 <div class="portrait-frame-wrapper">
                     <div class="portrait-frame">
-                        <div class="portrait-inner-glow"></div>
-                        <div class="portrait-silhouette">
-                            <div class="portrait-ear-left"></div>
-                            <div class="portrait-ear-right"></div>
-                        </div>
-                        <div class="portrait-name-plaque">Unnamed</div>
-                    </div>
+    					<div class="portrait-inner-glow"></div>
+    						<img src="images/unnamed.jpeg" 
+         					alt="Portrait of Unnamed" 
+         					class="portrait-image">
+    					<div class="portrait-name-plaque">Unnamed</div>
+					</div>
                 </div>
 
                 <!-- Quote -->
