@@ -371,29 +371,13 @@
             justify-content: center;
         }
 
-        .portrait-inner {
-            text-align: center;
-            padding: 20px;
-        }
-        .portrait-ears {
-            font-size: 40px;
-            letter-spacing: 14px;
-            display: block;
-        }
-        .portrait-face {
-            font-size: 60px;
-            display: block;
-            margin-top: -5px;
-        }
-        .portrait-label {
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            color: var(--brown);
-            display: block;
-            margin-top: 4px;
-            font-family: 'Georgia', serif;
-        }
+        .portrait-img {
+    		width: 100%;
+    		height: 100%;
+    		object-fit: cover;
+    		display: block;
+    		border-radius: 50%;
+		}
 
         .quote-block {
             margin: 20px 0 16px;
@@ -751,16 +735,12 @@
         <header class="header-section">
             <!-- Raqeem's Portrait -->
             <div class="portrait-frame">
-                <div class="portrait-inner">
-                    <span class="portrait-ears">🐾</span>
-                    <span class="portrait-face">🐕</span>
-                    <span class="portrait-label">Raqeem</span>
-                </div>
-            </div>
+    			<img src="images/raqeem.jpeg" alt="Raqeem" class="portrait-img">
+			</div>
 
             <!-- Quote -->
             <div class="quote-block">
-                <blockquote>"CHEEMS <span class="emoji-face">^_^</span>"</blockquote>
+                <blockquote>CHEEMS <span class="emoji-face">^_^</span></blockquote>
             </div>
 
             <!-- Title -->
